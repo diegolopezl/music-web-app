@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for music app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/near-exe/music-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/near-exe/music-app/issues"
+  },
+  "homepage": "https://github.com/near-exe/music-app#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
