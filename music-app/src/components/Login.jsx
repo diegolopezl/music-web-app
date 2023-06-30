@@ -10,7 +10,7 @@ export default function Login() {
       <div className="login-box">
         <>
           <h1>Hello, Welcome!</h1>
-          <p>Enjoy the music and customize your experience!</p>
+          <p>Enjoy our music and customize your experience!</p>
           <img src={arrow} />
         </>
         <a className="log-in-spotify" href={AUTH_URL}>
