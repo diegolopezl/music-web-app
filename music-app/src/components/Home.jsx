@@ -7,7 +7,7 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "bdc864947d434109a5f887fb98551d7c",
 });
 
-export default function Homepage({ code }) {
+export default function Home({ code }) {
   const accessToken = useAuth(code);
 
   useEffect(() => {
@@ -15,9 +15,5 @@ export default function Homepage({ code }) {
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
 
-  return (
-    <>
-      <h1>hola</h1>
-    </>
-  );
+  return <section className="home-page">home</section>;
 }

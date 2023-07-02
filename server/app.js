@@ -1,22 +1,20 @@
 //Dependencias y librerias
 const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const SpotifyWebApi = require("spotify-web-api-node");
+require("dotenv").config();
+
 const app = express();
 const port = 5000;
-const cors = require("cors");
-require("dotenv").config();
-const SpotifyWebAPI = require('spotify-web-api-node');
 
-//Middlewares para paso de datos entre front end y back end
-app.use(express.json());
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(cors());
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken
-  const spotifyApi = new SpotifyWebAPI({
+  const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -37,11 +35,9 @@ app.post("/refresh", (req, res) => {
     })
 })
 
-
 //Autenticacion del token del login
 app.post('/login' , (req,res) => {
   const code = req.body.code;
-
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
     clientId: process.env.CLIENT_ID,
@@ -60,7 +56,6 @@ app.post('/login' , (req,res) => {
   .catch(err => {
     res.sendStatus(400)
   })
-
 });
 
 
