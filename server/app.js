@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const cors = require("cors");
+require("dotenv").config();
 const SpotifyWebAPI = require('spotify-web-api-node');
 
 //Middlewares para paso de datos entre front end y back end
