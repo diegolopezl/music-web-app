@@ -73,7 +73,7 @@
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   text-align: left;
   grid-area: nav;
-  over-flow: hidden;
+  overflow: hidden;
 }
 
 .nav-logo {

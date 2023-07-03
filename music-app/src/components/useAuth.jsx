@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Custom hook for handling authentication with Spotify.
 export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState();
   const [refreshToken, setRefreshToken] = useState();
   const [expiresIn, setExpiresIn] = useState();
 
+  // Exchanges the authorization code for access and refresh tokens
   useEffect(() => {
     axios
-      .post("http://localhost:5000/login", {
+      .post("http://localhost:5000/auth/login", {
         code,
       })
       .then((res) => {
@@ -22,11 +24,14 @@ export default function useAuth(code) {
       });
   }, [code]);
 
+  // Refreshes the access token before it expires
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
+
+    // Schedule token refresh based on expiresIn value
     const interval = setInterval(() => {
       axios
-        .post("http://localhost:5000/refresh", {
+        .post("http://localhost:5000/auth/refresh", {
           refreshToken,
         })
         .then((res) => {
@@ -36,7 +41,7 @@ export default function useAuth(code) {
         .catch((err) => {
           window.location = "/";
         });
-    }, (expiresIn - 60) * 1000);
+    }, (expiresIn - 60) * 1000); // Refresh the token 1 minute before it expires
 
     return () => clearInterval(interval);
   }, [refreshToken, expiresIn]);

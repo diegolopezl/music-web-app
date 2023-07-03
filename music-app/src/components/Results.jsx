@@ -1,6 +1,14 @@
 import React from "react";
 
+//Component for displaying search results.
 export default function Results({ track, artist }) {
+  function truncateString(text, maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + "...";
+  }
+
   return (
     <div>
       {track && (
@@ -11,7 +19,7 @@ export default function Results({ track, artist }) {
             alt="Track Album"
           />
           <div>
-            <h4>{track.name}</h4>
+            <h4>{truncateString(track.name, 30)}</h4>
             <p>{track.artists.map((artist) => artist.name).join(", ")}</p>
           </div>
         </div>

@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/refresh", (req, res) => {
+app.post("/auth/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken;
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
@@ -36,7 +36,7 @@ app.post("/refresh", (req, res) => {
 });
 
 //Autenticacion del token del login
-app.post("/login", (req, res) => {
+app.post("/auth/login", (req, res) => {
   const code = req.body.code;
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URI,
@@ -56,6 +56,10 @@ app.post("/login", (req, res) => {
     .catch((err) => {
       res.sendStatus(400);
     });
+});
+
+app.get("/auth/clientID", (req, res) => {
+  res.json({ clientId: process.env.CLIENT_ID });
 });
 
 app.listen(port, () => {

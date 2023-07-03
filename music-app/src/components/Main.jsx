@@ -6,34 +6,39 @@ import HomePage from "./HomePage";
 import SearchPage from "./SearchPage";
 import SpotifyWebApi from "spotify-web-api-node";
 
-const spotifyApi = new SpotifyWebApi({
-  clientId: "63d757ee79774e2c82429b24c51aade3",
-});
-
-const componentMap = {
-  Home: HomePage,
-  Search: SearchPage,
-};
-
-export default function Main({ code }) {
+// Main component responsible for rendering the main page.
+export default function Main({ code, clientId }) {
+  // Initialize state variables
   const [currentComponent, setCurrentComponent] = useState("Home");
   const accessToken = useAuth(code);
 
   useEffect(() => {
-    if (!accessToken) return;
+    // Set the access token of the SpotifyWebApi instance
+    if (!accessToken || !clientId) return;
+    const spotifyApi = new SpotifyWebApi({
+      clientId: clientId,
+    });
     spotifyApi.setAccessToken(accessToken);
-  }, [accessToken]);
+  }, [accessToken, clientId]);
 
+  // Map of component names to their respective components
+  const componentMap = {
+    Home: HomePage,
+    Search: SearchPage,
+  };
+
+  // Changes the current component to be rendered.
   const changeComponent = (component) => {
     setCurrentComponent(component);
   };
 
+  // Get the component to be rendered based on the currentComponent state
   const CurrentComponent = componentMap[currentComponent];
 
   return (
     <main className="main-page">
-      <NavBar changeComponent={changeComponent} />{" "}
-      {/* Pass the changeComponent function to the Sidebar */}
+      <NavBar changeComponent={changeComponent} />
+      {/* Passing the changeComponent function to the Sidebar */}
       <div className="center">
         <CurrentComponent accessToken={accessToken} />
       </div>

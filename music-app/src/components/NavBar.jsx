@@ -3,7 +3,9 @@ import textLogo from "../assets/logo-text.svg";
 import { AiFillHome } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 
+//NavBar component responsible for rendering the sidebar navigation.
 export default function NavBar({ changeComponent }) {
+  //Handles the button click event and calls the changeComponent function with the specified component.
   const handleButtonClick = (component) => {
     changeComponent(component);
   };

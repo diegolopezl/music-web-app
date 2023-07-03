@@ -3,21 +3,33 @@ import { FiSearch } from "react-icons/fi";
 import Results from "./Results";
 import axios from "axios";
 
+// Spotify's Web API base url, saved into a variable
 const API_BASE_URL = "https://api.spotify.com/v1";
 
+//Component for searching using the Spotify API.
 export default function SearchPage({ accessToken }) {
+  //Initializing state variables
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
 
+  //Fetches data from the Spotify API based on the search query.
+  //Updates the trackResults and artistResults state array variables accordingly.
   useEffect(() => {
-    if (!search) return; // Don't perform the search if the query is empty
-
+    if (!search) {
+      setTrackResults([]); // Reset trackResults when search is empty
+      setArtistResults([]); // Reset artistResults when search is empty
+      return;
+    }
     let cancel = false;
 
+    //Fetching data with asynchronous functions
     const fetchData = async () => {
       try {
+        // Creating promises for each API call
         const [tracks, artists] = await Promise.all([
+          // Using GET with Axios using the base URL and setting the endpoint to "search",
+          // with these parameters for the request
           axios.get(`${API_BASE_URL}/search`, {
             params: {
               q: search,
@@ -56,10 +68,10 @@ export default function SearchPage({ accessToken }) {
     };
   }, [search, accessToken]);
 
-  useEffect(() => {
-    console.log(trackResults);
-    console.log(artistResults);
-  }, [trackResults, artistResults]);
+  // useEffect(() => {
+  //   console.log(trackResults);
+  //   console.log(artistResults);
+  // }, [trackResults, artistResults]);
 
   return (
     <section className="center-section">
@@ -75,7 +87,8 @@ export default function SearchPage({ accessToken }) {
           }}
         />
       </div>
-
+      {/* Rendering each type of result using the map function // to map over the
+      array of results from the api */}
       {trackResults.length > 0 && (
         <div className="search-results">
           <h3>Songs</h3>
@@ -84,7 +97,6 @@ export default function SearchPage({ accessToken }) {
           ))}
         </div>
       )}
-
       {artistResults.length > 0 && (
         <div className="search-results">
           <h3>Artists</h3>
