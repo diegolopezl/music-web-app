@@ -2,34 +2,44 @@ import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import NavBar from "./NavBar";
 import MusicTray from "./MusicTray";
-import HomePage from "./HomePage";
-import SearchPage from "./SearchPage";
+import Home from "./Home";
+import Search from "./Search";
 import SpotifyWebApi from "spotify-web-api-node";
 
 // Main component responsible for rendering the main page.
 export default function Main({ code, clientId }) {
-  // Initialize state variables
-  const [currentComponent, setCurrentComponent] = useState("Home");
-  const accessToken = useAuth(code);
+  const { accessToken, logout } = useAuth(code);
+  // const [userDisplayName, setUserDisplayName] = useState("");
 
   useEffect(() => {
-    // Set the access token of the SpotifyWebApi instance
     if (!accessToken || !clientId) return;
     const spotifyApi = new SpotifyWebApi({
       clientId: clientId,
     });
     spotifyApi.setAccessToken(accessToken);
+    // spotifyApi.getMe().then((response) => { Gets active users name
+    //   setUserDisplayName(response.body.display_name);
+    // });
   }, [accessToken, clientId]);
 
   // Map of component names to their respective components
   const componentMap = {
-    Home: HomePage,
-    Search: SearchPage,
+    home: Home,
+    search: Search,
   };
 
-  // Changes the current component to be rendered.
+  // State variable to track the current component
+  const [currentComponent, setCurrentComponent] = useState("home");
+
+  // Function to change the current component
   const changeComponent = (component) => {
     setCurrentComponent(component);
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    logout();
+    window.location = "/login"; // Redirect to login
   };
 
   // Get the component to be rendered based on the currentComponent state
@@ -38,8 +48,13 @@ export default function Main({ code, clientId }) {
   return (
     <main className="main-page">
       <NavBar changeComponent={changeComponent} />
-      {/* Passing the changeComponent function to the Sidebar */}
+
       <div className="center">
+        {/* <p>Welcome, {userDisplayName}</p>
+        <button className="logout" onClick={handleLogout}>
+          Logout
+        </button> */}
+        {/* Add logout button or link */}
         <CurrentComponent accessToken={accessToken} />
       </div>
       <MusicTray />

@@ -7,7 +7,7 @@ import axios from "axios";
 const API_BASE_URL = "https://api.spotify.com/v1";
 
 //Component for searching using the Spotify API.
-export default function SearchPage({ accessToken }) {
+export default function Search({ accessToken }) {
   //Initializing state variables
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);

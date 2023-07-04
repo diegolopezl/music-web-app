@@ -31,16 +31,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login clientId={clientId} />} />
-        <Route
-          path="/"
-          element={
-            code ? (
-              <Main code={code} clientId={clientId} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        <Route path="/" element={<Main code={code} clientId={clientId} />} />
       </Routes>
     </Router>
   );

@@ -77,8 +77,8 @@
 }
 
 .nav-logo {
-  transform: scale(1.25);
-  margin: 30px 50px;
+  transform: scale(1.15);
+  margin: 40px 50px 20px 50px;
 }
 
 .nav-section {
@@ -96,7 +96,7 @@
   height: 50px;
   text-align: left;
   padding: 0 40px;
-  gap: 20px;
+  gap: 30px;
 }
 
 .nav-section > button:hover {
@@ -114,7 +114,7 @@
 }
 
 .nav-icon {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 
 .nav-link {
@@ -123,6 +123,7 @@
 }
 
 .center {
+  padding: 30px 50px;
   overflow-y: auto;
   grid-area: center;
 }
@@ -147,12 +148,12 @@
 .search-bar {
   background-color: #2c2c2c;
   width: 300px;
-  height: 50px;
+  height: 45px;
   display: flex;
   align-items: center;
   gap: 15px;
-  border-radius: 40px;
-  padding: 10px 15px;
+  border-radius: 50px;
+  padding: 15px;
 }
 
 .search-input {
@@ -175,4 +176,17 @@
 .result-img {
   height: 64px;
   width: 64px;
+}
+
+.logout {
+  width: 100px;
+  height: 30px;
+  background-color: white;
+  color: black;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: none;
 }

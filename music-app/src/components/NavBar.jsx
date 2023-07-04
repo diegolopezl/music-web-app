@@ -16,11 +16,11 @@ export default function NavBar({ changeComponent }) {
       <nav>
         <div className="nav-section">
           <h4 className="nav-title">MENU</h4>
-          <button onClick={() => handleButtonClick("Home")}>
+          <button onClick={() => handleButtonClick("home")}>
             <AiFillHome className="nav-icon" />
             <h4 className="nav-link">Home</h4>
           </button>
-          <button onClick={() => handleButtonClick("Search")}>
+          <button onClick={() => handleButtonClick("search")}>
             <FiSearch className="nav-icon" />
             <h4 className="nav-link">Search</h4>
           </button>
