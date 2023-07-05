@@ -1,7 +1,6 @@
 import React from "react";
 import arrow from "../assets/arrow-hero.svg";
 import blobs from "../assets/blobs2.svg";
-import { useState, useEffect } from "react";
 
 //Login component responsible for rendering the login section.
 export default function Login({ clientId }) {

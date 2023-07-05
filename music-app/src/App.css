@@ -4,7 +4,10 @@
 }
 
 .login-section {
-  transform: scale(0.9);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.93);
 }
 
 .login-box {
@@ -88,7 +91,7 @@
   margin-bottom: 40px;
 }
 
-.nav-section > button {
+.nav-button {
   background-color: #202020;
   border: none;
   display: flex;
@@ -99,7 +102,7 @@
   gap: 30px;
 }
 
-.nav-section > button:hover {
+.nav-button:hover {
   cursor: pointer;
   background-color: #272727;
 }

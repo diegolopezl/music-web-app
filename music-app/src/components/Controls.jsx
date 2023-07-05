@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function PlayControls() {
+export default function Controls() {
   return <div className="player-controls"></div>;
 }

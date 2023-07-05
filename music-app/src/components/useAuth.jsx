@@ -60,11 +60,11 @@ export default function useAuth(code) {
     return () => clearInterval(interval);
   }, [refreshToken, expiresIn, isRefreshing]);
 
-  // Clear the access token from localStorage on logout
-  const logout = () => {
-    setAccessToken(null);
-    localStorage.removeItem(ACCESS_TOKEN);
-  };
+  // // Clear the access token from localStorage on logout
+  // const logout = () => {
+  //   setAccessToken(null);
+  //   localStorage.removeItem(ACCESS_TOKEN);
+  // };
 
-  return { accessToken, logout };
+  return { accessToken };
 }
