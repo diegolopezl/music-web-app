@@ -1,6 +1,6 @@
 import React from "react";
 import textLogo from "../assets/logo-text.svg";
-import { AiFillHome } from "react-icons/ai";
+import { PiHouseFill } from "react-icons/pi";
 import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
@@ -8,12 +8,14 @@ import { Link } from "react-router-dom";
 export default function NavBar() {
   return (
     <aside className="nav-bar">
-      <img className="nav-logo" src={textLogo} alt="Logo" />
+      <Link className="go-home" to="/">
+        <img className="nav-logo" src={textLogo} alt="Logo" />
+      </Link>
       <nav>
         <div className="nav-section">
           <h4 className="nav-title">MENU</h4>
           <Link className="nav-button" to="/">
-            <AiFillHome className="nav-icon" />
+            <PiHouseFill className="nav-icon" />
             <h4 className="nav-link">Home</h4>
           </Link>
           <Link className="nav-button" to="/search">

@@ -8,7 +8,6 @@ import {
 import { useState, useEffect } from "react";
 import SpotifyWebApi from "spotify-web-api-node";
 import Login from "./components/Login";
-//import Main from "./components/Main";
 import Home from "./components/Home";
 import Controls from "./components/Controls";
 import NavBar from "./components/NavBar";

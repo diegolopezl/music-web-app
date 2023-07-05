@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { FiSearch } from "react-icons/fi";
 import Results from "./Results";
+import Header from "./Header";
 import axios from "axios";
 
 // Spotify's Web API base url, saved into a variable
@@ -74,37 +74,29 @@ export default function Search({ accessToken }) {
   // }, [trackResults, artistResults]);
 
   return (
-    <section className="center-section">
-      <div className="search-bar">
-        <FiSearch className="nav-icon" />
-        <input
-          className="search-input"
-          type="search"
-          placeholder="Search something"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
-      </div>
-      {/* Rendering each type of result using the map function // to map over the
+    <section className="center">
+      <Header search={search} setSearch={setSearch} />
+
+      <div className="center-content">
+        {/* Rendering each type of result using the map function // to map over the
       array of results from the api */}
-      {trackResults.length > 0 && (
-        <div className="search-results">
-          <h3>Songs</h3>
-          {trackResults.map((track) => (
-            <Results key={track.uri} track={track} />
-          ))}
-        </div>
-      )}
-      {artistResults.length > 0 && (
-        <div className="search-results">
-          <h3>Artists</h3>
-          {artistResults.map((artist) => (
-            <Results key={artist.id} artist={artist} />
-          ))}
-        </div>
-      )}
+        {trackResults.length > 0 && (
+          <div className="search-results">
+            <h3>Songs</h3>
+            {trackResults.map((track) => (
+              <Results key={track.uri} track={track} />
+            ))}
+          </div>
+        )}
+        {artistResults.length > 0 && (
+          <div className="search-results">
+            <h3>Artists</h3>
+            {artistResults.map((artist) => (
+              <Results key={artist.id} artist={artist} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
