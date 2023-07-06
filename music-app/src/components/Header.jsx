@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router";
 import { FiSearch } from "react-icons/fi";
 
-export default function Header({ search, setSearch }) {
+export default function Header({ search, setSearch, userName }) {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
@@ -11,9 +11,12 @@ export default function Header({ search, setSearch }) {
 
   return (
     <header className="header">
-      {location.pathname == "/search" && (
-        <SearchInput search={search} onChange={handleSearchChange} />
-      )}
+      <div>
+        {location.pathname == "/search" && (
+          <SearchInput search={search} onChange={handleSearchChange} />
+        )}
+      </div>
+      <UserMenu userName={userName} />
     </header>
   );
 }
@@ -28,7 +31,18 @@ export function SearchInput({ search, onChange }) {
         value={search}
         placeholder="What are you in the mood for?"
         onChange={onChange}
+        maxLength="40"
       />
     </div>
+  );
+}
+
+export function UserMenu({ userName }) {
+  return (
+    <>
+      <div className="user-menu">
+        <p>{userName}</p>
+      </div>
+    </>
   );
 }

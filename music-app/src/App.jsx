@@ -27,6 +27,7 @@ export default function App() {
 }
 
 function AppContent() {
+  const [userDisplayName, setUserDisplayName] = useState("");
   const [clientId, setClientId] = useState(null); // State variable for storing the client ID
   const { accessToken } = useAuth(code); // State variable for storing the accessToken
   const location = useLocation();
@@ -44,14 +45,15 @@ function AppContent() {
       });
   }, []);
 
-  // const [userDisplayName, setUserDisplayName] = useState("");
-
   useEffect(() => {
     if (!accessToken || !clientId) return;
     const spotifyApi = new SpotifyWebApi({
       clientId: clientId,
     });
     spotifyApi.setAccessToken(accessToken);
+    spotifyApi.getMe().then((response) => {
+      setUserDisplayName(response.body.display_name);
+    });
   }, [accessToken, clientId]);
 
   return (
@@ -59,8 +61,18 @@ function AppContent() {
       {showNavandControls && <NavBar />}
       <Routes>
         <Route path="/login" element={<Login clientId={clientId} />} />
-        <Route path="/" element={<Home accessToken={accessToken} />} />
-        <Route path="/search" element={<Search accessToken={accessToken} />} />
+        <Route
+          path="/"
+          element={
+            <Home accessToken={accessToken} userName={userDisplayName} />
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <Search accessToken={accessToken} userName={userDisplayName} />
+          }
+        />
       </Routes>
       {showNavandControls && <Controls />}
     </main>

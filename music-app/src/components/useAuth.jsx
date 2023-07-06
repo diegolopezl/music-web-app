@@ -8,9 +8,8 @@ export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem(ACCESS_TOKEN) || null
   );
-  const [refreshToken, setRefreshToken] = useState(null);
-  const [expiresIn, setExpiresIn] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshToken, setRefreshToken] = useState();
+  const [expiresIn, setExpiresIn] = useState();
 
   // Exchanges the authorization code for access and refresh tokens
   useEffect(() => {
@@ -34,31 +33,26 @@ export default function useAuth(code) {
 
   // Refreshes the access token before it expires
   useEffect(() => {
-    if (!refreshToken || !expiresIn || isRefreshing) return;
-
-    const refreshAccessToken = async () => {
-      try {
-        setIsRefreshing(true);
-        const res = await axios.post("http://localhost:5000/auth/refresh", {
+    if (!refreshToken || !expiresIn) return;
+    const refreshAccessToken = () => {
+      axios
+        .post("http://localhost:5000/auth/refresh", {
           refreshToken,
+        })
+        .then((res) => {
+          setAccessToken(res.data.accessToken);
+          setExpiresIn(res.data.expiresIn);
+          localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
+        })
+        .catch(() => {
+          window.location = "/";
         });
-        setAccessToken(res.data.accessToken);
-        setExpiresIn(res.data.expiresIn);
-        setIsRefreshing(false);
-        localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
-      } catch (err) {
-        window.location = "/";
-      }
     };
 
-    const tokenExpirationTime = expiresIn - 60;
-    const interval = setInterval(
-      refreshAccessToken,
-      tokenExpirationTime * 1000
-    );
+    const interval = setInterval(refreshAccessToken, (expiresIn - 60) * 1000);
 
     return () => clearInterval(interval);
-  }, [refreshToken, expiresIn, isRefreshing]);
+  }, [refreshToken, expiresIn]);
 
   // // Clear the access token from localStorage on logout
   // const logout = () => {
