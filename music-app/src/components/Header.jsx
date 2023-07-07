@@ -9,14 +9,21 @@ export default function Header({ search, setSearch, userName }) {
 
   const location = useLocation();
 
+  // const handleLogout = () => {
+  //   logout();
+  //   window.location = "/login"; // Redirect to login
+  // };
+
   return (
     <header className="header">
       <div>
-        {location.pathname == "/search" && (
+        {location.pathname === "/search" && (
           <SearchInput search={search} onChange={handleSearchChange} />
         )}
       </div>
-      <UserMenu userName={userName} />
+      <div className="user-menu">
+        <p>{userName}</p>
+      </div>
     </header>
   );
 }

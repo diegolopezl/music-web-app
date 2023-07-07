@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
   useLocation,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -13,7 +12,7 @@ import Controls from "./components/Controls";
 import NavBar from "./components/NavBar";
 import Search from "./components/Search";
 import useAuth from "./components/useAuth";
-import "./App.css";
+import "./styles/App.css";
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
@@ -74,7 +73,7 @@ function AppContent() {
           }
         />
       </Routes>
-      {showNavandControls && <Controls />}
+      {showNavandControls && <Controls accessToken={accessToken} />}
     </main>
   );
 }

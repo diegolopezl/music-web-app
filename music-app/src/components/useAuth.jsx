@@ -16,9 +16,7 @@ export default function useAuth(code) {
     if (!code) return;
 
     axios
-      .post("http://localhost:5000/auth/login", {
-        code,
-      })
+      .post("http://localhost:5000/auth/login", { code })
       .then((res) => {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
@@ -36,9 +34,7 @@ export default function useAuth(code) {
     if (!refreshToken || !expiresIn) return;
     const refreshAccessToken = () => {
       axios
-        .post("http://localhost:5000/auth/refresh", {
-          refreshToken,
-        })
+        .post("http://localhost:5000/auth/refresh", { refreshToken })
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
