@@ -4,6 +4,7 @@ import NavBar from "./NavBar";
 import Controls from "./Controls";
 import Home from "./Home";
 import Search from "./Search";
+import Player from "./Player";
 import SpotifyWebApi from "spotify-web-api-node";
 
 // Main component responsible for rendering the main page.
