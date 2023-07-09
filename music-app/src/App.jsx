@@ -12,7 +12,6 @@ import Controls from "./components/Controls";
 import NavBar from "./components/NavBar";
 import Search from "./components/Search";
 import useAuth from "./components/useAuth";
-import Player from "./components/Player";
 import "./styles/App.css";
 
 const params = new URLSearchParams(window.location.search);
