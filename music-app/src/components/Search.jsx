@@ -3,6 +3,8 @@ import Results from "./Results";
 import Header from "./Header";
 import Footer from "./Footer";
 import axios from "axios";
+import Controls from "./Controls";
+import useAuth from "./useAuth";
 
 // Spotify's Web API base url, saved into a variable
 const API_BASE_URL = "https://api.spotify.com/v1";
@@ -103,7 +105,7 @@ export default function Search({ accessToken, userName, userImage }) {
           <div className="search-results">
             <h3>Artists</h3>
             {artistResults.map((artist) => (
-              <Results key={artist.id} artist={artist} />
+              <Results key={artist.id} artist={artist} chooseTrack={chooseTrack} />
             ))}
           </div>
         )} */}

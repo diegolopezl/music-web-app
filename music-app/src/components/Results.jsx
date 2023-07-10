@@ -28,7 +28,11 @@ export default function Results({ track, chooseTrack, artist }) {
   return (
     <div style={{ cursor: "pointer" }} onClick={handlePlay}>
       {track && (
-        <div className="search-result">
+        <div
+          className="search-result"
+          style={{ cursor: "pointer" }}
+          onClick={handlePlay}
+        >
           <img
             className="result-img"
             src={track.album.images[0].url}
