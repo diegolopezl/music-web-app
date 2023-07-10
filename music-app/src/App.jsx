@@ -92,9 +92,7 @@ function AppContent() {
           }
         />
       </Routes>
-      {showNavandControls && (
-        <Controls accessToken={accessToken} trackUri={trackUri} />
-      )}
+      {showNavandControls && <Controls accessToken={accessToken} />}
     </main>
   );
 }
