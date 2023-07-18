@@ -2,13 +2,6 @@ import React from "react";
 
 //Component for displaying search results.
 export default function Results({ track, artist }) {
-  function truncateString(text, maxLength) {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength) + "...";
-  }
-
   return (
     <div>
       {track && (
@@ -35,4 +28,11 @@ export default function Results({ track, artist }) {
       )}
     </div>
   );
+}
+
+export function truncateString(text, maxLength) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + "...";
 }
