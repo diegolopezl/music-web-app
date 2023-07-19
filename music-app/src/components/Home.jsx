@@ -9,11 +9,12 @@ export default function Home({ accessToken, userName }) {
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
+  const [recommendedArtists, setRecommendedArtists] = useState([]);
   const [globalTracks, setGlobalTracks] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
-  const [recommendedArtists, setRecommendedArtists] = useState([]);
 
+  const countryCode = "JP";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,12 +71,11 @@ export default function Home({ accessToken, userName }) {
               },
             }),
           ]);
-
         // Fetch recommended tracks
         const seedTracks = topTracks.data.items
           .map((track) => track.id)
           .join(",");
-        const recommendedResponse = await axios.get(
+        const recommendedTracksResponse = await axios.get(
           `${API_BASE_URL}/recommendations`,
           {
             params: {
@@ -87,27 +87,53 @@ export default function Home({ accessToken, userName }) {
             },
           }
         );
-        // console.log(topArtists);
 
-        // const seedArtists = topArtists.data.items.id
-        //   .map((artist) => artist.id)
-        //   .join(",");
-        // const recommendedArtistsResponse = await axios.get(
-        //   `${API_BASE_URL}/recommendations`,
-        //   {
-        //     params: {
-        //       seed_artists: seedArtists,
-        //       limit: 5, // Fetch 5 recommended artists
-        //     },
-        //     headers: {
-        //       Authorization: `Bearer ${accessToken}`,
-        //     },
-        //   }
-        // );
-        // Set the user's top tracks, recommended tracks, global top tracks, recently played tracks, and featured playlists
+        const seedArtists = topArtists.data.items
+          .map((artist) => artist.id)
+          .join(",");
+        const recommendedArtistsResponse = await axios.get(
+          `${API_BASE_URL}/recommendations`,
+          {
+            params: {
+              seed_artists: seedArtists,
+              limit: 5, // Fetch 5 recommended artists
+            },
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        // Store recommended artists with their IDs in a separate array
+        const recommendedArtistsIDs =
+          recommendedArtistsResponse.data.tracks.map(
+            (track) => track.artists[0].id
+          );
+
+        // Fetch additional information for each recommended artist based on their ID
+        const recommendedArtistsDataPromises = recommendedArtistsIDs.map(
+          async (artistID) => {
+            const artistInfo = await axios.get(
+              `${API_BASE_URL}/artists/${artistID}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            );
+            return artistInfo.data;
+          }
+        );
+
+        // Wait for all the promises to resolve and set the recommendedArtistsData state
+        const recommendedArtistsDataResponse = await Promise.all(
+          recommendedArtistsDataPromises
+        );
+
+        // Set the user's top tracks, recommended tracks/artists, global top tracks, recently played tracks, and featured playlists
         setTrackResults(topTracks.data.items);
-        setRecommendedTracks(recommendedResponse.data.tracks);
-        // setRecommendedArtists(recommendedArtistsResponse.data.tracks);
+        setRecommendedTracks(recommendedTracksResponse.data.tracks);
+        setRecommendedArtists(recommendedArtistsDataResponse);
         setGlobalTracks(topGlobal.data.items);
         setRecentlyPlayed(recent.data.items);
         setFeaturedPlaylists(featured.data.playlists.items);
@@ -143,38 +169,21 @@ export default function Home({ accessToken, userName }) {
           ))}
         </div>
 
-        <h2>Top Artists</h2>
-        <div className="track-cards">
-          {artistResults.map((item) => {
-            const artist = item;
-            return <ArtistCards key={artist.id} artist={artist} />;
-          })}
-        </div>
-        {/* 
-        <h2>Recommended Artists</h2>
-        <div className="track-cards">
-          {recommendedArtists.map((artist) => {
-            const artist = item;
-            return <ArtistCards key={artist.id} artist={artist} />;
-          })}
-        </div> */}
-
-        <h2>Recommended Songs</h2>
+        <h2>Songs you might like</h2>
         <div className="track-cards">
           {recommendedTracks.map((track) => (
             <HomeCards key={track.id} track={track} />
           ))}
         </div>
 
-        <h2>Recently Played</h2>
+        <h2>Your top artists</h2>
         <div className="track-cards">
-          {recentlyPlayed.map((item) => {
-            const track = item.track;
-            return <HomeCards key={track.id} track={track} />;
-          })}
+          {artistResults.map((item) => (
+            <ArtistCards key={item.id} artist={item} />
+          ))}
         </div>
 
-        <h2>Top 50 Global</h2>
+        <h2>Top 50 - Global</h2>
         <div className="track-cards">
           {globalTracks.map((item) => {
             const track = item.track;
@@ -182,7 +191,22 @@ export default function Home({ accessToken, userName }) {
           })}
         </div>
 
-        <h2>Today's Featured Playlists</h2>
+        <h2>Recently played</h2>
+        <div className="track-cards">
+          {recentlyPlayed.map((item) => {
+            const track = item.track;
+            return <HomeCards key={track.id} track={track} />;
+          })}
+        </div>
+
+        <h2>Recommended Artists</h2>
+        <div className="track-cards">
+          {recommendedArtists.map((artist) => (
+            <ArtistCards key={artist.id} artist={artist} />
+          ))}
+        </div>
+
+        <h2>Featured playlists</h2>
         <div className="track-cards">
           {featuredPlaylists.map((playlist) => (
             <PlaylistCards
@@ -204,10 +228,14 @@ function HomeCards({ track }) {
   const truncatedArtistNames = truncateString(artistNames, 30);
 
   return (
-    <div className="track-card">
-      <img src={track.album.images[0].url} alt={track.name} />
+    <div className="card">
+      <img
+        className="cover-img"
+        src={track.album.images[0].url}
+        alt={track.name}
+      />
       <p className="card-title">{truncateString(track.name, 16)}</p>
-      <p className="track-artist">{truncatedArtistNames}</p>
+      <p className="card-text">{truncatedArtistNames}</p>
     </div>
   );
 }
@@ -215,20 +243,24 @@ function HomeCards({ track }) {
 function PlaylistCards({ image, title, description }) {
   const truncatedDescription = truncateString(description, 40);
   return (
-    <div className="track-card">
-      <img src={image} alt={title} />
+    <div className="card">
+      <img className="cover-img" src={image} alt={title} />
       <p className="card-title">{truncateString(title, 14)}</p>
-      <p className="track-artist">{truncatedDescription}</p>
+      <p className="card-text">{truncatedDescription}</p>
     </div>
   );
 }
 
 function ArtistCards({ artist }) {
   return (
-    <div className="track-card">
-      <img src={artist.images[0].url} alt={artist.name} />
+    <div className="card">
+      <img
+        className="artist-img"
+        src={artist.images[0].url}
+        alt={artist.name}
+      />
       <p className="card-title">{truncateString(artist.name, 16)}</p>
-      <p className="track-artist">xd</p>
+      <p className="card-text">Artist</p>
     </div>
   );
 }
