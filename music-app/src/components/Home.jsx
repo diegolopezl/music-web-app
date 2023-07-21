@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Header from "./Header";
-import { truncateString } from "./Results";
+import Footer from "./Footer";
+import { TrackCards, PlaylistCards, ArtistCards } from "./CardComponents";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
@@ -14,7 +15,9 @@ export default function Home({ accessToken, userName }) {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
 
-  const countryCode = "JP";
+  const dataLimit = 25;
+  const auth = `Bearer ${accessToken}`;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,10 +27,10 @@ export default function Home({ accessToken, userName }) {
             axios.get(`${API_BASE_URL}/me/top/tracks`, {
               params: {
                 time_range: "medium_term",
-                limit: 5,
+                limit: dataLimit,
               },
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: auth,
               },
             }),
             // Fetch top 5 tracks from the global top 50 playlist
@@ -35,74 +38,76 @@ export default function Home({ accessToken, userName }) {
               `${API_BASE_URL}/playlists/37i9dQZEVXbMDoHDwVN2tF/tracks`,
               {
                 params: {
-                  limit: 5,
+                  limit: dataLimit,
                 },
                 headers: {
-                  Authorization: `Bearer ${accessToken}`,
+                  Authorization: auth,
                 },
               }
             ),
             // Fetch recently played tracks
             axios.get(`${API_BASE_URL}/me/player/recently-played`, {
               params: {
-                limit: 5,
+                limit: dataLimit,
               },
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: auth,
               },
             }),
             // Fetch featured playlists
             axios.get(`${API_BASE_URL}/browse/featured-playlists`, {
               params: {
-                limit: 5,
+                limit: dataLimit,
               },
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: auth,
               },
             }),
             // Fetch user's top artists
             axios.get(`${API_BASE_URL}/me/top/artists`, {
               params: {
-                time_range: "medium_term",
-                limit: 5,
+                time_range: "long_term",
+                limit: dataLimit,
               },
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: auth,
               },
             }),
           ]);
-        // Fetch recommended tracks
+
         const seedTracks = topTracks.data.items
           .map((track) => track.id)
+          .slice(0, 5)
           .join(",");
-        const recommendedTracksResponse = await axios.get(
-          `${API_BASE_URL}/recommendations`,
-          {
-            params: {
-              seed_tracks: seedTracks,
-              limit: 5, // Fetch 5 recommended tracks
-            },
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
 
         const seedArtists = topArtists.data.items
           .map((artist) => artist.id)
+          .slice(0, 5)
           .join(",");
-        const recommendedArtistsResponse = await axios.get(
-          `${API_BASE_URL}/recommendations`,
-          {
-            params: {
-              seed_artists: seedArtists,
-              limit: 5, // Fetch 5 recommended artists
-            },
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+
+        const [recommendedTracksResponse, recommendedArtistsResponse] =
+          await Promise.all([
+            // Fetch recommended tracks
+            axios.get(`${API_BASE_URL}/recommendations`, {
+              params: {
+                seed_tracks: seedTracks,
+                limit: dataLimit,
+              },
+              headers: {
+                Authorization: auth,
+              },
+            }),
+            // Fetch recommended artists
+            axios.get(`${API_BASE_URL}/recommendations`, {
+              params: {
+                seed_artists: seedArtists,
+                limit: dataLimit,
+              },
+              headers: {
+                Authorization: auth,
+              },
+            }),
+          ]);
 
         // Store recommended artists with their IDs in a separate array
         const recommendedArtistsIDs =
@@ -117,7 +122,7 @@ export default function Home({ accessToken, userName }) {
               `${API_BASE_URL}/artists/${artistID}`,
               {
                 headers: {
-                  Authorization: `Bearer ${accessToken}`,
+                  Authorization: auth,
                 },
               }
             );
@@ -163,51 +168,51 @@ export default function Home({ accessToken, userName }) {
         <h1 className="home-greeting">
           Good {time}, {userName.slice(0, userName.indexOf(" "))}
         </h1>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {trackResults.map((track) => (
-            <HomeCards key={track.id} track={track} />
+            <TrackCards key={track.id} track={track} />
           ))}
-        </div>
+        </CardContainer>
 
         <h2>Songs you might like</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {recommendedTracks.map((track) => (
-            <HomeCards key={track.id} track={track} />
+            <TrackCards key={track.id} track={track} />
           ))}
-        </div>
+        </CardContainer>
 
         <h2>Your top artists</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {artistResults.map((item) => (
             <ArtistCards key={item.id} artist={item} />
           ))}
-        </div>
+        </CardContainer>
 
         <h2>Top 50 - Global</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {globalTracks.map((item) => {
             const track = item.track;
-            return <HomeCards key={track.id} track={track} />;
+            return <TrackCards key={track.id} track={track} />;
           })}
-        </div>
+        </CardContainer>
 
         <h2>Recently played</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {recentlyPlayed.map((item) => {
             const track = item.track;
-            return <HomeCards key={track.id} track={track} />;
+            return <TrackCards key={track.id} track={track} />;
           })}
-        </div>
+        </CardContainer>
 
         <h2>Recommended Artists</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {recommendedArtists.map((artist) => (
             <ArtistCards key={artist.id} artist={artist} />
           ))}
-        </div>
+        </CardContainer>
 
         <h2>Featured playlists</h2>
-        <div className="track-cards">
+        <CardContainer cardWidth={200}>
           {featuredPlaylists.map((playlist) => (
             <PlaylistCards
               key={playlist.id}
@@ -216,51 +221,50 @@ export default function Home({ accessToken, userName }) {
               description={playlist.description}
             />
           ))}
-        </div>
+        </CardContainer>
       </div>
+      <Footer />
     </section>
   );
 }
 
-// HomeCards function component to render individual track cards
-function HomeCards({ track }) {
-  const artistNames = track.artists.map((artist) => artist.name).join(", ");
-  const truncatedArtistNames = truncateString(artistNames, 30);
+function CardContainer({ children, cardWidth }) {
+  // Ref to get the width of the container element
+  const containerRef = useRef(null);
+
+  // Calculate the number of cards to be shown based on container width
+  const [cardAmount, setCardAmount] = useState(5);
+  const minGap = 30; // Minimum gap between cards
+
+  useEffect(() => {
+    // Update the number of cards to be shown based on the container width.
+    const updateCardAmount = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const maxAmount = Math.floor(
+          (containerWidth + minGap) / (cardWidth + minGap)
+        );
+        console.log(maxAmount);
+        // Limit the cardAmount to a maximum of 15
+        setCardAmount(Math.min(maxAmount, 15));
+      }
+    };
+
+    // Update the number of cards to be shown on initial render and window resize
+    updateCardAmount();
+    window.addEventListener("resize", updateCardAmount);
+    return () => window.removeEventListener("resize", updateCardAmount);
+  }, []);
 
   return (
-    <div className="card">
-      <img
-        className="cover-img"
-        src={track.album.images[0].url}
-        alt={track.name}
-      />
-      <p className="card-title">{truncateString(track.name, 16)}</p>
-      <p className="card-text">{truncatedArtistNames}</p>
-    </div>
-  );
-}
-
-function PlaylistCards({ image, title, description }) {
-  const truncatedDescription = truncateString(description, 40);
-  return (
-    <div className="card">
-      <img className="cover-img" src={image} alt={title} />
-      <p className="card-title">{truncateString(title, 14)}</p>
-      <p className="card-text">{truncatedDescription}</p>
-    </div>
-  );
-}
-
-function ArtistCards({ artist }) {
-  return (
-    <div className="card">
-      <img
-        className="artist-img"
-        src={artist.images[0].url}
-        alt={artist.name}
-      />
-      <p className="card-title">{truncateString(artist.name, 16)}</p>
-      <p className="card-text">Artist</p>
+    <div className="track-cards" ref={containerRef}>
+      {React.Children.map(children, (child, index) => {
+        // Show only the first cardAmount children
+        if (index < cardAmount) {
+          return child;
+        }
+        return null;
+      })}
     </div>
   );
 }

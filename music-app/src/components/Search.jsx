@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Results from "./Results";
 import Header from "./Header";
+import Footer from "./Footer";
 import axios from "axios";
 
 // Spotify's Web API base url, saved into a variable
@@ -92,6 +93,7 @@ export default function Search({ accessToken, userName }) {
           </div>
         )}
       </div>
+      <Footer />
     </section>
   );
 }
