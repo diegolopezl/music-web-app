@@ -1,12 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
-import { TrackCards, PlaylistCards, ArtistCards } from "./CardComponents";
+import CardContainer from "./CardContainer";
+import {
+  TrackCards,
+  PlaylistCards,
+  AlbumCards,
+  ArtistCards,
+} from "./CardComponents";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
-export default function Home({ accessToken, userName }) {
+export default function Home({ accessToken, userName, userImage }) {
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
@@ -14,6 +20,7 @@ export default function Home({ accessToken, userName }) {
   const [globalTracks, setGlobalTracks] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [featuredPlaylists, setFeaturedPlaylists] = useState([]);
+  const [genrePlaylist, setGenrePlaylist] = useState([]);
 
   const dataLimit = 25;
   const auth = `Bearer ${accessToken}`;
@@ -117,9 +124,9 @@ export default function Home({ accessToken, userName }) {
 
         // Fetch additional information for each recommended artist based on their ID
         const recommendedArtistsDataPromises = recommendedArtistsIDs.map(
-          async (artistID) => {
+          async (artistId) => {
             const artistInfo = await axios.get(
-              `${API_BASE_URL}/artists/${artistID}`,
+              `${API_BASE_URL}/artists/${artistId}`,
               {
                 headers: {
                   Authorization: auth,
@@ -135,14 +142,34 @@ export default function Home({ accessToken, userName }) {
           recommendedArtistsDataPromises
         );
 
+        const topGenre = topArtists.data.items
+          .slice(0, 1)
+          .map((artist) => artist.genres[0])
+          .join(",");
+
+        const genrePlaylist = await axios.get(`${API_BASE_URL}/search`, {
+          params: {
+            q: topGenre,
+            type: "album",
+            limit: 15,
+          },
+          headers: {
+            Authorization: auth,
+          },
+        });
+
+        console.log(genrePlaylist);
+        const genrePlaylistsResponse = genrePlaylist.data.albums.items;
+
         // Set the user's top tracks, recommended tracks/artists, global top tracks, recently played tracks, and featured playlists
         setTrackResults(topTracks.data.items);
+        setArtistResults(topArtists.data.items);
         setRecommendedTracks(recommendedTracksResponse.data.tracks);
         setRecommendedArtists(recommendedArtistsDataResponse);
-        setGlobalTracks(topGlobal.data.items);
         setRecentlyPlayed(recent.data.items);
         setFeaturedPlaylists(featured.data.playlists.items);
-        setArtistResults(topArtists.data.items);
+        setGlobalTracks(topGlobal.data.items);
+        setGenrePlaylist(genrePlaylistsResponse);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -163,7 +190,7 @@ export default function Home({ accessToken, userName }) {
 
   return (
     <section className="center">
-      <Header userName={userName} />
+      <Header userName={userName} userImage={userImage} />
       <div className="center-content">
         <h1 className="home-greeting">
           Good {time}, {userName.slice(0, userName.indexOf(" "))}
@@ -204,6 +231,19 @@ export default function Home({ accessToken, userName }) {
           })}
         </CardContainer>
 
+        <h2>Some playlists for you</h2>
+        <CardContainer cardWidth={200}>
+          {genrePlaylist.map((album) => (
+            <AlbumCards
+              key={album.id}
+              image={album.images[0].url}
+              title={album.name}
+              year={album.release_date.slice(0, 4)}
+              artist={album.artists[0].name}
+            />
+          ))}
+        </CardContainer>
+
         <h2>Recommended Artists</h2>
         <CardContainer cardWidth={200}>
           {recommendedArtists.map((artist) => (
@@ -225,46 +265,5 @@ export default function Home({ accessToken, userName }) {
       </div>
       <Footer />
     </section>
-  );
-}
-
-function CardContainer({ children, cardWidth }) {
-  // Ref to get the width of the container element
-  const containerRef = useRef(null);
-
-  // Calculate the number of cards to be shown based on container width
-  const [cardAmount, setCardAmount] = useState(5);
-  const minGap = 30; // Minimum gap between cards
-
-  useEffect(() => {
-    // Update the number of cards to be shown based on the container width.
-    const updateCardAmount = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const maxAmount = Math.floor(
-          (containerWidth + minGap) / (cardWidth + minGap)
-        );
-        console.log(maxAmount);
-        // Limit the cardAmount to a maximum of 15
-        setCardAmount(Math.min(maxAmount, 15));
-      }
-    };
-
-    // Update the number of cards to be shown on initial render and window resize
-    updateCardAmount();
-    window.addEventListener("resize", updateCardAmount);
-    return () => window.removeEventListener("resize", updateCardAmount);
-  }, []);
-
-  return (
-    <div className="track-cards" ref={containerRef}>
-      {React.Children.map(children, (child, index) => {
-        // Show only the first cardAmount children
-        if (index < cardAmount) {
-          return child;
-        }
-        return null;
-      })}
-    </div>
   );
 }

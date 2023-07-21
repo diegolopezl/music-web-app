@@ -8,7 +8,7 @@ import axios from "axios";
 const API_BASE_URL = "https://api.spotify.com/v1";
 
 //Component for searching using the Spotify API.
-export default function Search({ accessToken, userName }) {
+export default function Search({ accessToken, userName, userImage }) {
   //Initializing state variables
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);
@@ -71,7 +71,12 @@ export default function Search({ accessToken, userName }) {
 
   return (
     <section className="center">
-      <Header search={search} setSearch={setSearch} userName={userName} />
+      <Header
+        search={search}
+        setSearch={setSearch}
+        userName={userName}
+        userImage={userImage}
+      />
 
       <div className="center-content">
         {/* Rendering each type of result using the map function // to map over the

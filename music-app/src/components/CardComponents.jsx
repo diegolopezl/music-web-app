@@ -17,12 +17,24 @@ export function TrackCards({ track }) {
 }
 
 export function PlaylistCards({ image, title, description }) {
-  const truncatedDescription = truncateString(description, 35);
+  const truncatedDescription = truncateString(description, 20);
   return (
     <div className="card">
       <img className="cover-img" src={image} alt={title} />
       <p className="card-title">{truncateString(title, 14)}</p>
       <p className="card-text">{truncatedDescription}</p>
+    </div>
+  );
+}
+
+export function AlbumCards({ image, title, year, artist }) {
+  return (
+    <div className="card">
+      <img className="cover-img" src={image} alt={title} />
+      <p className="card-title">{truncateString(title, 14)}</p>
+      <p className="card-text">
+        {year} • {artist}
+      </p>
     </div>
   );
 }

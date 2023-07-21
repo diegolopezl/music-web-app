@@ -26,7 +26,8 @@ export default function App() {
 }
 
 function AppContent() {
-  const [userDisplayName, setUserDisplayName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
   const [clientId, setClientId] = useState(null); // State variable for storing the client ID
   const { accessToken } = useAuth(code); // State variable for storing the accessToken
   const location = useLocation();
@@ -50,8 +51,16 @@ function AppContent() {
       clientId: clientId,
     });
     spotifyApi.setAccessToken(accessToken);
+
+    // Get user's profile information
     spotifyApi.getMe().then((response) => {
-      setUserDisplayName(response.body.display_name);
+      const { display_name, images } = response.body;
+      setUserName(display_name);
+
+      // Check if the user has any images, and if yes, set the first image as the user's profile image
+      if (images && images.length > 0) {
+        setUserImage(images[0].url);
+      }
     });
   }, [accessToken, clientId]);
 
@@ -63,13 +72,21 @@ function AppContent() {
         <Route
           path="/"
           element={
-            <Home accessToken={accessToken} userName={userDisplayName} />
+            <Home
+              accessToken={accessToken}
+              userName={userName}
+              userImage={userImage}
+            />
           }
         />
         <Route
           path="/search"
           element={
-            <Search accessToken={accessToken} userName={userDisplayName} />
+            <Search
+              accessToken={accessToken}
+              userName={userName}
+              userImage={userImage}
+            />
           }
         />
       </Routes>

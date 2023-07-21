@@ -187,13 +187,27 @@
 
 .user-menu {
   height: 45px;
-  width: 200px;
+  width: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #272727;
+  justify-content: flex-start;
+  background-color: #202020;
   border-radius: 50px;
+  padding: 0 10px;
+  gap: 10px;
   justify-self: end;
+}
+
+.user-img {
+  width: 30px;
+  height: 30px;
+  background-color: #272727;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.user-menu p {
+  padding-right: 10px;
 }
 
 .search-icon {
@@ -270,10 +284,16 @@
 .card {
   width: 200px;
   height: 275px;
-  background-color: #252525;
+  background-color: #202020;
   border-radius: 10px;
   padding: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background-color: #252525;
+  cursor: pointer;
 }
 
 .card img {
@@ -281,6 +301,8 @@
   max-height: 170px;
   object-fit: cover;
   margin-bottom: 15px;
+  background-color: #272727;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .cover-img {
