@@ -21,17 +21,17 @@ export default function Controls({ accessToken }) {
           if (!state.isPlaying) setPlay(false);
         }}
         play={play}
-        uris={trackUri ? trackUri : []}
+        uris={trackUri ? [trackUri] : []}
         styles={{
           activeColor: "#fff",
-          bgColor: "transparent",
+          bgColor: "#000000",
           color: "#fff",
           loaderColor: "#fff",
           sliderColor: "#fff",
           sliderHandleColor: "#fff",
           trackArtistColor: "#ccc",
           trackNameColor: "#fff",
-          height: "80px",
+          height: 80,
         }}
       />
     </div>

@@ -1,5 +1,6 @@
 .PlayerRSWP {
   padding: 0 25px;
+  background-color: transparent !important;
 }
 ._WrapperRSWP {
   display: grid;
