@@ -157,8 +157,6 @@ export default function Home({ accessToken, userName, userImage }) {
             Authorization: auth,
           },
         });
-
-        console.log(genrePlaylist);
         const genrePlaylistsResponse = genrePlaylist.data.albums.items;
 
         // Set the user's top tracks, recommended tracks/artists, global top tracks, recently played tracks, and featured playlists

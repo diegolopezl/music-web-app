@@ -13,6 +13,13 @@ export default function Search({ accessToken, userName, userImage }) {
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
+  const [playingTrack, setPlayingTrack] = useState();
+
+  function chooseTrack(track) {
+    setPlayingTrack(track);
+
+    setSearch("");
+  }
 
   //Fetches data from the Spotify API based on the search query.
   //Updates the trackResults and artistResults state array variables accordingly.
@@ -35,7 +42,7 @@ export default function Search({ accessToken, userName, userImage }) {
             params: {
               q: search,
               type: "track",
-              limit: 10,
+              limit: 20,
             },
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -85,18 +92,22 @@ export default function Search({ accessToken, userName, userImage }) {
           <div className="search-results">
             <h3>Songs</h3>
             {trackResults.map((track) => (
-              <Results key={track.uri} track={track} />
+              <Results
+                key={track.uri}
+                track={track}
+                chooseTrack={chooseTrack}
+              />
             ))}
           </div>
         )}
-        {artistResults.length > 0 && (
+        {/* {artistResults.length > 0 && (
           <div className="search-results">
             <h3>Artists</h3>
             {artistResults.map((artist) => (
               <Results key={artist.id} artist={artist} />
             ))}
           </div>
-        )}
+        )} */}
       </div>
       <Footer />
     </section>

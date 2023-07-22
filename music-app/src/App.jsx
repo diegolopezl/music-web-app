@@ -66,7 +66,7 @@ function AppContent() {
 
   return (
     <main className="main-page">
-      {showNavandControls && <NavBar />}
+      {showNavandControls && <NavBar accessToken={accessToken} />}
       <Routes>
         <Route path="/login" element={<Login clientId={clientId} />} />
         <Route

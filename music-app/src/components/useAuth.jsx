@@ -36,9 +36,9 @@ export default function useAuth(code) {
       axios
         .post("http://localhost:5000/auth/refresh", { refreshToken })
         .then((res) => {
-          setAccessToken(res.data.accessToken);
+          setRefreshToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
-          localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
+          localStorage.setItem(ACCESS_TOKEN, refreshToken);
         })
         .catch(() => {
           window.location = "/";

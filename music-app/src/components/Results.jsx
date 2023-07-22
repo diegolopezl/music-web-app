@@ -1,9 +1,13 @@
 import React from "react";
 
 //Component for displaying search results.
-export default function Results({ track, artist }) {
+export default function Results({ track, chooseTrack, artist }) {
+  function handlePlay() {
+    chooseTrack(track);
+    localStorage.setItem("trackUri", track?.uri);
+  }
   return (
-    <div>
+    <div style={{ cursor: "pointer" }} onClick={handlePlay}>
       {track && (
         <div className="search-result">
           <img
@@ -18,14 +22,14 @@ export default function Results({ track, artist }) {
         </div>
       )}
 
-      {artist && artist.images && artist.images.length > 0 && (
+      {/* {artist && artist.images && artist.images.length > 0 && (
         <div className="search-result">
           <img className="result-img" src={artist.images[0].url} alt="Artist" />
           <div>
             <h4>{artist.name}</h4>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
