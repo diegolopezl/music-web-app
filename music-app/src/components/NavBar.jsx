@@ -3,6 +3,7 @@ import textLogo from "../assets/logo-text.svg";
 import { PiHouseFill } from "react-icons/pi";
 import { FiSearch, FiPlusSquare } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
+import liked from "../assets/likedsongs.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { truncateString } from "./Results";
@@ -11,26 +12,26 @@ const API_BASE_URL = "https://api.spotify.com/v1";
 // NavBar component responsible for rendering the sidebar navigation.
 export default function NavBar({ accessToken }) {
   const auth = `Bearer ${accessToken}`;
-  const [userId, setUserId] = useState("");
   const [savedPlaylists, setSavedPlaylists] = useState([]);
+  const [savedAlbums, setSavedAlbums] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userIdResponse = await axios.get(`${API_BASE_URL}/me`, {
-          headers: {
-            Authorization: auth,
-          },
-        });
-        setUserId(userIdResponse.data.id);
-        const userPlaylistsResponse = await axios.get(
-          `${API_BASE_URL}/me/playlists`,
-          {
+        const [userPlaylistsResponse, userAlbumsResponse] = await Promise.all([
+          axios.get(`${API_BASE_URL}/me/playlists`, {
             headers: {
               Authorization: auth,
             },
-          }
-        );
+          }),
+          axios.get(`${API_BASE_URL}/me/albums`, {
+            headers: {
+              Authorization: auth,
+            },
+          }),
+        ]);
         setSavedPlaylists(userPlaylistsResponse.data.items);
+        setSavedAlbums(userAlbumsResponse.data.items);
+        console.log(userPlaylistsResponse.data.items);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,26 +58,61 @@ export default function NavBar({ accessToken }) {
         </div>
         <div className="nav-section">
           <h4 className="nav-title">LIBRARY</h4>
-          <Link className="nav-button" to="/search">
+          <Link className="nav-button" to="/">
             <FiPlusSquare className="nav-icon create-new" />
             <h4 className="nav-link">Create New</h4>
           </Link>
-          <Link className="nav-button" to="/favorites">
-            <AiFillHeart className="nav-icon" />
-            <h4 className="nav-link">Favorites</h4>
+          <Link className="nav-button nav-button-pl" to="/favorites">
+            <img className="nav-pl-img" src={liked} alt="pl-img" />
+            <div>
+              <h4 className="nav-link">Favorites</h4>
+              <p className="nav-type">Playlist • You</p>
+            </div>
           </Link>
-          {/* {savedPlaylists.map((playlist) => (
-            <Link className="nav-button" to="/playlist">
-              <img
-                className="nav-pl-img nav-icon"
-                src={playlist.images[0].url}
-                alt="pl-img"
-              />
-              <h4 className="nav-playlist">
-                {truncateString(playlist.name, 14)}
-              </h4>
-            </Link>
-          ))} */}
+          {savedPlaylists != [] &&
+            savedPlaylists.map((playlist) => (
+              <Link
+                key={playlist.uri}
+                className="nav-button nav-button-pl"
+                to="/playlist"
+              >
+                <img
+                  className="nav-pl-img"
+                  src={playlist.images[0].url}
+                  alt="pl-img"
+                />
+                <div>
+                  <h4 className="nav-playlist">
+                    {truncateString(playlist.name, 17)}
+                  </h4>
+                  <p className="nav-type">
+                    Playlist • {playlist.owner.display_name}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          {savedAlbums != [] &&
+            savedAlbums.map((album) => (
+              <Link
+                key={album.album.uri}
+                className="nav-button nav-button-pl"
+                to="/album"
+              >
+                <img
+                  className="nav-pl-img"
+                  src={album.album.images[0].url}
+                  alt="pl-img"
+                />
+                <div>
+                  <h4 className="nav-playlist">
+                    {truncateString(album.album.name, 15)}
+                  </h4>
+                  <p className="nav-type">
+                    Album • {album.album.artists[0].name}
+                  </p>
+                </div>
+              </Link>
+            ))}
         </div>
       </nav>
     </aside>

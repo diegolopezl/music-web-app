@@ -1,5 +1,5 @@
 .PlayerRSWP {
-  padding: 0 25px;
+  padding: 0 15px;
   background-color: transparent !important;
 }
 ._WrapperRSWP {
@@ -27,6 +27,19 @@
   gap: 50px;
 }
 
+._ContentWrapperRSWP {
+  margin-left: 15px;
+}
+
+._ContentWrapperRSWP > a {
+  display: none;
+}
+
+._InfoRSWP > a > img {
+  border-radius: 5px;
+  height: 60px;
+  width: 60px;
+}
 ._ControlsButtonsRSWP {
   margin: 0;
   display: grid;
@@ -35,4 +48,20 @@
 
 ._SliderRSWP {
   min-width: 100px;
+}
+
+.slider__thumb,
+.volume__thumb {
+  background-color: #ffffff !important;
+  display: none !important;
+}
+
+.slider:hover .slider__range,
+.volume:hover .volume__range {
+  background-color: #ff2d6c !important;
+}
+
+.slider:hover .slider__thumb,
+.volume:hover .volume__thumb {
+  display: block !important;
 }

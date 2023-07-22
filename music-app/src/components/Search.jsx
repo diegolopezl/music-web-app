@@ -17,7 +17,6 @@ export default function Search({ accessToken, userName, userImage }) {
 
   function chooseTrack(track) {
     setPlayingTrack(track);
-
     setSearch("");
   }
 

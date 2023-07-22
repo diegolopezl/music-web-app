@@ -2,12 +2,8 @@ import { useState, useEffect } from "react";
 import SpotifyPlayer from "react-spotify-web-playback";
 import "../styles/Player.css";
 
-export default function Controls({ accessToken }) {
+export default function Controls({ accessToken, trackUri }) {
   const [play, setPlay] = useState(false);
-
-  const trackUri = localStorage.getItem("trackUri");
-  console.log(trackUri);
-
   useEffect(() => {
     setPlay(true);
   }, [trackUri]);
@@ -22,13 +18,13 @@ export default function Controls({ accessToken }) {
         }}
         play={play}
         uris={trackUri ? [trackUri] : []}
+        layout="responsive"
         styles={{
           activeColor: "#fff",
-          bgColor: "#000000",
           color: "#fff",
           loaderColor: "#fff",
           sliderColor: "#fff",
-          sliderHandleColor: "#fff",
+          sliderTrackColor: "#4d4d4d",
           trackArtistColor: "#ccc",
           trackNameColor: "#fff",
           height: 80,

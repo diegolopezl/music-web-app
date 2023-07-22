@@ -64,6 +64,8 @@ function AppContent() {
     });
   }, [accessToken, clientId]);
 
+  const trackUri = localStorage.getItem("trackUri");
+
   return (
     <main className="main-page">
       {showNavandControls && <NavBar accessToken={accessToken} />}
@@ -90,7 +92,9 @@ function AppContent() {
           }
         />
       </Routes>
-      {showNavandControls && <Controls accessToken={accessToken} />}
+      {showNavandControls && (
+        <Controls accessToken={accessToken} trackUri={trackUri} />
+      )}
     </main>
   );
 }

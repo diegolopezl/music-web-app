@@ -2,9 +2,28 @@ import React from "react";
 
 //Component for displaying search results.
 export default function Results({ track, chooseTrack, artist }) {
-  function handlePlay() {
+  async function handlePlay() {
     chooseTrack(track);
     localStorage.setItem("trackUri", track?.uri);
+    try {
+      const response = await fetch("http://localhost:5000/api/track", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uri: track?.uri }),
+      });
+
+      if (response.ok) {
+        // Request was successful
+        console.log("Data sent successfully!");
+      } else {
+        // Request failed
+        console.log("Failed to send data!");
+      }
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
   }
   return (
     <div style={{ cursor: "pointer" }} onClick={handlePlay}>

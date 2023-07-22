@@ -157,6 +157,18 @@ export default function Home({ accessToken, userName, userImage }) {
             Authorization: auth,
           },
         });
+
+        // Array containing unique tracks based on track.id
+        const uniqueTracks = recent.data.items.reduce((acc, item) => {
+          const track = item.track;
+          // Check if the track is already in the acc array by comparing track.id
+          if (!acc.some((existingTrack) => existingTrack.id === track.id)) {
+            // If the track is not in the array, add it to the accumulator array
+            acc.push(track);
+          }
+          return acc;
+        }, []);
+
         const genrePlaylistsResponse = genrePlaylist.data.albums.items;
 
         // Set the user's top tracks, recommended tracks/artists, global top tracks, recently played tracks, and featured playlists
@@ -164,7 +176,7 @@ export default function Home({ accessToken, userName, userImage }) {
         setArtistResults(topArtists.data.items);
         setRecommendedTracks(recommendedTracksResponse.data.tracks);
         setRecommendedArtists(recommendedArtistsDataResponse);
-        setRecentlyPlayed(recent.data.items);
+        setRecentlyPlayed(uniqueTracks);
         setFeaturedPlaylists(featured.data.playlists.items);
         setGlobalTracks(topGlobal.data.items);
         setGenrePlaylist(genrePlaylistsResponse);
@@ -223,10 +235,9 @@ export default function Home({ accessToken, userName, userImage }) {
 
         <h2>Recently played</h2>
         <CardContainer cardWidth={200}>
-          {recentlyPlayed.map((item) => {
-            const track = item.track;
-            return <TrackCards key={track.id} track={track} />;
-          })}
+          {recentlyPlayed.map((track) => (
+            <TrackCards key={track.id} track={track} />
+          ))}
         </CardContainer>
 
         <h2>Some playlists for you</h2>

@@ -2,7 +2,7 @@ import { truncateString } from "./Results";
 
 export function TrackCards({ track }) {
   const artistNames = track.artists.map((artist) => artist.name).join(", ");
-  const truncatedArtistNames = truncateString(artistNames, 30);
+  const truncatedArtistNames = truncateString(artistNames, 40);
   return (
     <div className="card">
       <img
@@ -17,7 +17,7 @@ export function TrackCards({ track }) {
 }
 
 export function PlaylistCards({ image, title, description }) {
-  const truncatedDescription = truncateString(description, 20);
+  const truncatedDescription = truncateString(description, 35);
   return (
     <div className="card">
       <img className="cover-img" src={image} alt={title} />
