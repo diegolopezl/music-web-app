@@ -2,27 +2,9 @@ import React from "react";
 
 //Component for displaying search results.
 export default function Results({ track, chooseTrack, artist }) {
-  async function handlePlay() {
-    chooseTrack(track);
-    try {
-      const response = await fetch("http://localhost:5000/api/track", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uri: track?.uri }),
-      });
-
-      if (response.ok) {
-        // Request was successful
-        console.log("Data sent successfully!");
-      } else {
-        // Request failed
-        console.log("Failed to send data!");
-      }
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
+  function handlePlay() {
+    chooseTrack(track?.uri);
+    // postUri(track?.uri);
   }
   return (
     <div style={{ cursor: "pointer" }} onClick={handlePlay}>
@@ -53,3 +35,25 @@ export function truncateString(text, maxLength) {
   }
   return text.substring(0, maxLength) + "...";
 }
+
+// const postUri = async (trackUri) => {
+//   try {
+//     const response = await fetch("http://localhost:5000/api/track", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ uri: trackUri }),
+//     });
+
+//     if (response.ok) {
+//       // Request was successful
+//       console.log("Data sent successfully!");
+//     } else {
+//       // Request failed
+//       console.log("Failed to send data!");
+//     }
+//   } catch (error) {
+//     console.error("Error sending data:", error);
+//   }
+// };

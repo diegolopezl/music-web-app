@@ -18,17 +18,30 @@ const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
 export default function App() {
+  // const [fetchTrackUri, setFetchTrackUri] = useState(true);
+  const [trackUri, setTrackUri] = useState([]);
   return (
     <Router>
-      <AppContent />
+      <AppContent
+        trackUri={trackUri}
+        setTrackUri={setTrackUri}
+        // fetchTrackUri={fetchTrackUri}
+        // setFetchTrackUri={setFetchTrackUri}
+      />
     </Router>
   );
 }
 
-function AppContent() {
+function AppContent({
+  trackUri,
+  setTrackUri,
+  // fetchTrackUri,
+  // setFetchTrackUri,
+}) {
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
   const [clientId, setClientId] = useState(null); // State variable for storing the client ID
+
   const { accessToken } = useAuth(code); // State variable for storing the accessToken
   const location = useLocation();
   const showNavandControls = location.pathname !== "/login";
@@ -88,11 +101,21 @@ function AppContent() {
               accessToken={accessToken}
               userName={userName}
               userImage={userImage}
+              setTrackUri={setTrackUri}
+              // setFetchTrackUri={setFetchTrackUri}
             />
           }
         />
       </Routes>
-      {showNavandControls && <Controls accessToken={accessToken} />}
+      {showNavandControls && (
+        <Controls
+          accessToken={accessToken}
+          trackUri={trackUri}
+          setTrackUri={setTrackUri}
+          // fetchTrackUri={fetchTrackUri}
+          // setFetchTrackUri={setFetchTrackUri}
+        />
+      )}
     </main>
   );
 }

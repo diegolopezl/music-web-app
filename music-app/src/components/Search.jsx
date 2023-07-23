@@ -3,14 +3,18 @@ import Results from "./Results";
 import Header from "./Header";
 import Footer from "./Footer";
 import axios from "axios";
-import Controls from "./Controls";
-import useAuth from "./useAuth";
 
 // Spotify's Web API base url, saved into a variable
 const API_BASE_URL = "https://api.spotify.com/v1";
 
 //Component for searching using the Spotify API.
-export default function Search({ accessToken, userName, userImage }) {
+export default function Search({
+  accessToken,
+  userName,
+  userImage,
+  setTrackUri,
+  // setFetchTrackUri,
+}) {
   //Initializing state variables
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);
@@ -18,8 +22,9 @@ export default function Search({ accessToken, userName, userImage }) {
   const [playingTrack, setPlayingTrack] = useState();
 
   function chooseTrack(track) {
-    setPlayingTrack(track);
+    setTrackUri(track);
     setSearch("");
+    // setFetchTrackUri(true);
   }
   //Fetches data from the Spotify API based on the search query.
   //Updates the trackResults and artistResults state array variables accordingly.
