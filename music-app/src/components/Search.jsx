@@ -21,7 +21,6 @@ export default function Search({ accessToken, userName, userImage }) {
     setPlayingTrack(track);
     setSearch("");
   }
-
   //Fetches data from the Spotify API based on the search query.
   //Updates the trackResults and artistResults state array variables accordingly.
   useEffect(() => {
@@ -30,6 +29,7 @@ export default function Search({ accessToken, userName, userImage }) {
       setArtistResults([]); // Reset artistResults when search is empty
       return;
     }
+    if (!accessToken) return;
     let cancel = false;
 
     //Fetching data with asynchronous functions
@@ -72,9 +72,7 @@ export default function Search({ accessToken, userName, userImage }) {
 
     fetchData();
 
-    return () => {
-      cancel = true; // Cancel the fetch request if the component unmounts or the search query changes
-    };
+    return () => (cancel = true); // Cancel the fetch request if the component unmounts or the search query changes
   }, [search, accessToken]);
 
   return (
@@ -97,6 +95,7 @@ export default function Search({ accessToken, userName, userImage }) {
                 key={track.uri}
                 track={track}
                 chooseTrack={chooseTrack}
+                // playingTrack={playingTrack}
               />
             ))}
           </div>

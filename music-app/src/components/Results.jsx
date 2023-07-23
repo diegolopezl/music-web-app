@@ -4,7 +4,6 @@ import React from "react";
 export default function Results({ track, chooseTrack, artist }) {
   async function handlePlay() {
     chooseTrack(track);
-    localStorage.setItem("trackUri", track?.uri);
     try {
       const response = await fetch("http://localhost:5000/api/track", {
         method: "POST",
@@ -31,7 +30,7 @@ export default function Results({ track, chooseTrack, artist }) {
         <div
           className="search-result"
           style={{ cursor: "pointer" }}
-          onClick={handlePlay}
+          onClick={() => handlePlay(track)}
         >
           <img
             className="result-img"

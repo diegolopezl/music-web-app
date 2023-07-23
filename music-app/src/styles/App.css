@@ -154,6 +154,10 @@
   border-radius: 3px;
 }
 
+.nav-artist-img {
+  border-radius: 100%;
+}
+
 .nav-link {
   font-weight: 600;
   letter-spacing: 1px;

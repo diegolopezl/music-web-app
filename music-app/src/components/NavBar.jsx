@@ -14,10 +14,15 @@ export default function NavBar({ accessToken }) {
   const auth = `Bearer ${accessToken}`;
   const [savedPlaylists, setSavedPlaylists] = useState([]);
   const [savedAlbums, setSavedAlbums] = useState([]);
+  const [savedArtists, setSavedArtists] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [userPlaylistsResponse, userAlbumsResponse] = await Promise.all([
+        const [
+          userPlaylistsResponse,
+          userAlbumsResponse,
+          savedArtistsResponse,
+        ] = await Promise.all([
           axios.get(`${API_BASE_URL}/me/playlists`, {
             headers: {
               Authorization: auth,
@@ -28,10 +33,15 @@ export default function NavBar({ accessToken }) {
               Authorization: auth,
             },
           }),
+          axios.get(`${API_BASE_URL}/me/following?type=artist`, {
+            headers: {
+              Authorization: auth,
+            },
+          }),
         ]);
         setSavedPlaylists(userPlaylistsResponse.data.items);
         setSavedAlbums(userAlbumsResponse.data.items);
-        console.log(userPlaylistsResponse.data.items);
+        setSavedArtists(savedArtistsResponse.data.artists.items);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -69,6 +79,24 @@ export default function NavBar({ accessToken }) {
               <p className="nav-type">Playlist • You</p>
             </div>
           </Link>
+          {savedArtists != [] &&
+            savedArtists.map((artist) => (
+              <Link
+                key={artist.uri}
+                className="nav-button nav-button-pl"
+                to="/playlist"
+              >
+                <img
+                  className="nav-pl-img nav-artist-img"
+                  src={artist.images[0].url}
+                  alt="pl-img"
+                />
+                <div>
+                  <h4 className="nav-playlist">{artist.name}</h4>
+                  <p className="nav-type">Artist</p>
+                </div>
+              </Link>
+            ))}
           {savedPlaylists != [] &&
             savedPlaylists.map((playlist) => (
               <Link

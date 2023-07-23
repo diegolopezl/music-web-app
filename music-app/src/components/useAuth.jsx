@@ -21,6 +21,7 @@ export default function useAuth(code) {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
+        localStorage.removeItem(ACCESS_TOKEN);
         localStorage.setItem(ACCESS_TOKEN, res.data.accessToken);
         window.history.pushState({}, null, "/");
       })

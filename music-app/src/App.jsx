@@ -64,7 +64,7 @@ function AppContent() {
     });
   }, [accessToken, clientId]);
 
-  const trackUri = localStorage.getItem("trackUri");
+  // const trackUri = localStorage.getItem("trackUri");
 
   return (
     <main className="main-page">

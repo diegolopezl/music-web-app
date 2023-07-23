@@ -55,11 +55,16 @@ app.get("/auth/clientID", (req, res) => {
   res.json({ clientId: process.env.CLIENT_ID });
 });
 
-app.post("/api/track", (req,res) =>
-{
-  const data = req.body;
-  console.log(data);
+let uriData = null; // Global variable to store the data
+
+app.post("/api/track", (req, res) => {
+  uriData = req.body.uri; // Store the data in the global variable
+  console.log(uriData);
   res.sendStatus(200);
+});
+
+app.get("/api/uri", (req, res) => {
+  res.json({ uri: uriData }); // Send the stored data back to the frontend
 });
 
 app.listen(port, () => {
