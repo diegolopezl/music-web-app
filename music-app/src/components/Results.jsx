@@ -43,15 +43,6 @@ export default function Results({ track, chooseTrack, artist }) {
           </div>
         </div>
       )}
-
-      {/* {artist && artist.images && artist.images.length > 0 && (
-        <div className="search-result">
-          <img className="result-img" src={artist.images[0].url} alt="Artist" />
-          <div>
-            <h4>{artist.name}</h4>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

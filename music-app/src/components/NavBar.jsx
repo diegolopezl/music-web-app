@@ -15,6 +15,21 @@ export default function NavBar({ accessToken }) {
   const [savedPlaylists, setSavedPlaylists] = useState([]);
   const [savedAlbums, setSavedAlbums] = useState([]);
   const [savedArtists, setSavedArtists] = useState([]);
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+
+  // Function to update the screen height state
+  const updateScreenHeight = () => {
+    setScreenHeight(window.innerHeight - 430);
+  };
+
+  useEffect(() => {
+    updateScreenHeight();
+    window.addEventListener("resize", updateScreenHeight);
+    return () => {
+      window.removeEventListener("resize", updateScreenHeight);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,81 +83,71 @@ export default function NavBar({ accessToken }) {
         </div>
         <div className="nav-section">
           <h4 className="nav-title">LIBRARY</h4>
-          <Link className="nav-button" to="/">
-            <FiPlusSquare className="nav-icon create-new" />
+          <Link className="nav-button create-new" to="/">
+            <FiPlusSquare className="nav-icon" />
             <h4 className="nav-link">Create New</h4>
           </Link>
-          <Link className="nav-button nav-button-pl" to="/favorites">
-            <img className="nav-pl-img" src={liked} alt="pl-img" />
-            <div>
-              <h4 className="nav-link">Favorites</h4>
-              <p className="nav-type">Playlist • You</p>
+          <div className="pl-container">
+            <div className="playlist-list" style={{ height: screenHeight }}>
+              <Link className="nav-button nav-button-pl" to="/favorites">
+                <img className="nav-pl-img" src={liked} alt="pl-img" />
+                <div>
+                  <h4 className="nav-link">Favorites</h4>
+                  <p className="nav-text">Playlist • You</p>
+                </div>
+              </Link>
+              {savedArtists != [] &&
+                savedArtists.map((artist) => (
+                  <NavButtons
+                    key={artist.uri}
+                    image={artist.images[0].url}
+                    title={truncateString(artist.name, 15)}
+                    text="Artist"
+                    type={artist.type}
+                  />
+                ))}
+              {savedPlaylists != [] &&
+                savedPlaylists.map((playlist) => (
+                  <NavButtons
+                    key={playlist.uri}
+                    image={playlist.images[0].url}
+                    title={truncateString(playlist.name, 15)}
+                    text={`Playlist • ${playlist.owner.display_name}`}
+                    type={playlist.type}
+                  />
+                ))}
+              {savedAlbums != [] &&
+                savedAlbums.map((album) => (
+                  <NavButtons
+                    key={album.album.uri}
+                    image={album.album.images[0].url}
+                    title={truncateString(album.album.name, 14)}
+                    text={`Album • ${album.album.artists[0].name}`}
+                    type={album.album.type}
+                  />
+                ))}
             </div>
-          </Link>
-          {savedArtists != [] &&
-            savedArtists.map((artist) => (
-              <Link
-                key={artist.uri}
-                className="nav-button nav-button-pl"
-                to="/playlist"
-              >
-                <img
-                  className="nav-pl-img nav-artist-img"
-                  src={artist.images[0].url}
-                  alt="pl-img"
-                />
-                <div>
-                  <h4 className="nav-playlist">{artist.name}</h4>
-                  <p className="nav-type">Artist</p>
-                </div>
-              </Link>
-            ))}
-          {savedPlaylists != [] &&
-            savedPlaylists.map((playlist) => (
-              <Link
-                key={playlist.uri}
-                className="nav-button nav-button-pl"
-                to="/playlist"
-              >
-                <img
-                  className="nav-pl-img"
-                  src={playlist.images[0].url}
-                  alt="pl-img"
-                />
-                <div>
-                  <h4 className="nav-playlist">
-                    {truncateString(playlist.name, 17)}
-                  </h4>
-                  <p className="nav-type">
-                    Playlist • {playlist.owner.display_name}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          {savedAlbums != [] &&
-            savedAlbums.map((album) => (
-              <Link
-                key={album.album.uri}
-                className="nav-button nav-button-pl"
-                to="/album"
-              >
-                <img
-                  className="nav-pl-img"
-                  src={album.album.images[0].url}
-                  alt="pl-img"
-                />
-                <div>
-                  <h4 className="nav-playlist">
-                    {truncateString(album.album.name, 15)}
-                  </h4>
-                  <p className="nav-type">
-                    Album • {album.album.artists[0].name}
-                  </p>
-                </div>
-              </Link>
-            ))}
+          </div>
         </div>
       </nav>
     </aside>
+  );
+}
+
+function NavButtons({ image, title, text, type }) {
+  return (
+    <div>
+      <Link className="nav-button nav-button-pl" to={`/${type}`}>
+        <img
+          className={`nav-pl-img ${type == "artist" && "nav-artist-img"}`}
+          src={image}
+          alt="playlist-img"
+        />
+        <div>
+          <h4 className="nav-playlist">{title}</h4>
+          <p className="nav-text">{text}</p>
+        </div>
+      </Link>
+    </div>
   );
 }

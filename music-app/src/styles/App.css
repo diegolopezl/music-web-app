@@ -84,23 +84,25 @@
   z-index: 2;
 }
 
+.nav-bar > nav {
+  display: grid;
+  grid-template-rows: 138px 1fr;
+  gap: 30px;
+  height: 100%;
+  overflow: hidden;
+}
+
 .nav-logo {
-  transform: scale(1.4);
+  transform: scale(1.15);
 }
 
 .go-home {
   display: block;
-  margin-top: 40px;
-  margin-bottom: 20px;
-  margin-right: 50px;
-  margin-left: 50px;
+  margin: 40px 50px 20px 40px;
 }
 
 .nav-section {
-  display: grid;
-  grid-template-rows: repeate(3, 50px);
   width: 100%;
-  margin-bottom: 40px;
 }
 
 .nav-button {
@@ -109,7 +111,7 @@
   align-items: center;
   height: 50px;
   text-align: left;
-  padding: 0 30px;
+  padding: 0 35px;
   gap: 20px;
   transition: all 0.3s ease-in-out;
 }
@@ -122,16 +124,19 @@
 }
 
 .nav-button-pl {
+  height: 60px;
   gap: 15px;
   padding: 0 0 0 30px;
 }
 
-.nav-button:hover,
-.nav-button:hover .nav-icon,
-.nav-button:hover .nav-link,
-.nav-button:hover .nav-playlist {
+.nav-button:hover {
   cursor: pointer;
   background-color: #212121;
+}
+
+.nav-button:hover .nav-playlist,
+.nav-button:hover .nav-link,
+.nav-button:hover .nav-icon {
   opacity: 1;
 }
 
@@ -141,7 +146,7 @@
   font-weight: 600;
   letter-spacing: 1px;
   opacity: 0.75;
-  margin: 10px 30px;
+  margin: 10px 35px;
 }
 
 .nav-icon {
@@ -149,9 +154,9 @@
 }
 
 .nav-pl-img {
-  height: 35px;
-  width: 35px;
-  border-radius: 3px;
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
 }
 
 .nav-artist-img {
@@ -164,16 +169,25 @@
   font-size: 0.88rem;
 }
 
+.pl-container {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.playlist-list {
+  overflow-y: auto;
+}
+
 .nav-playlist {
   font-weight: 600;
   letter-spacing: 1px;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
 }
 
-.nav-type {
+.nav-text {
   margin-top: 5px;
-  font-size: 0.8rem;
-  opacity: 0.8;
+  font-size: 0.9rem;
+  opacity: 0.5;
 }
 
 .center {
