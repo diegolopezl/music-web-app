@@ -3,6 +3,13 @@ import Results from "./Results";
 import Header from "./Header";
 import Footer from "./Footer";
 import axios from "axios";
+import {
+  TrackCards,
+  PlaylistCards,
+  AlbumCards,
+  ArtistCards,
+} from "./CardComponents";
+import CardContainer from "./CardContainer";
 
 // Spotify's Web API base url, saved into a variable
 const API_BASE_URL = "https://api.spotify.com/v1";
@@ -19,7 +26,10 @@ export default function Search({
   const [search, setSearch] = useState("");
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
-  const [playingTrack, setPlayingTrack] = useState();
+  const [albumResults, setAlbumResults] = useState([]);
+  const [playlistResults, setPlaylistResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const auth = `Bearer ${accessToken}`;
 
   function chooseTrack(track) {
     setTrackUri(track);
@@ -31,7 +41,7 @@ export default function Search({
   useEffect(() => {
     if (!search) {
       setTrackResults([]); // Reset trackResults when search is empty
-      setArtistResults([]); // Reset artistResults when search is empty
+      setSearchResults([]); // Reset artistResults when search is empty
       return;
     }
     if (!accessToken) return;
@@ -41,34 +51,23 @@ export default function Search({
     const fetchData = async () => {
       try {
         // Creating promises for each API call
-        const [tracks, artists] = await Promise.all([
-          // Using GET with Axios using the base URL and setting the endpoint to "search",
-          // with these parameters for the request
-          axios.get(`${API_BASE_URL}/search`, {
-            params: {
-              q: search,
-              type: "track",
-              limit: 20,
-            },
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }),
-          axios.get(`${API_BASE_URL}/search`, {
-            params: {
-              q: search,
-              type: "artist",
-              limit: 5,
-            },
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }),
-        ]);
+        const results = await axios.get(`${API_BASE_URL}/search`, {
+          params: {
+            q: search,
+            type: "track,artist,album,playlist",
+            limit: 10,
+          },
+          headers: {
+            Authorization: auth,
+          },
+        });
 
+        console.log(results);
         if (!cancel) {
-          setTrackResults(tracks.data.tracks.items);
-          setArtistResults(artists.data.artists.items);
+          setTrackResults(results.data.tracks.items);
+          setArtistResults(results.data.artists.items);
+          setAlbumResults(results.data.albums.items);
+          setPlaylistResults(results.data.playlists.items);
         }
       } catch (error) {
         console.log("Error fetching search results:", error);
@@ -90,29 +89,51 @@ export default function Search({
       />
 
       <div className="center-content">
-        {/* Rendering each type of result using the map function // to map over the
-      array of results from the api */}
-        {trackResults.length > 0 && (
+        {!search ? (
+          <div className="default-search">
+            <h2>Browse</h2>
+          </div>
+        ) : (
           <div className="search-results">
-            <h3>Songs</h3>
-            {trackResults.map((track) => (
-              <Results
-                key={track.uri}
-                track={track}
-                chooseTrack={chooseTrack}
-                // playingTrack={playingTrack}
-              />
-            ))}
+            <h2>Tracks</h2>
+            <CardContainer cardWidth={200}>
+              {trackResults.map((track) => (
+                <TrackCards key={track.id} track={track} />
+              ))}
+            </CardContainer>
+
+            <h2>Artists</h2>
+            <CardContainer cardWidth={200}>
+              {artistResults.map((artist) => (
+                <ArtistCards key={artist.id} artist={artist} />
+              ))}
+            </CardContainer>
+
+            <h2>Albums</h2>
+            <CardContainer cardWidth={200}>
+              {albumResults.map((album) => (
+                <AlbumCards
+                  key={album.id}
+                  image={album.images[0].url}
+                  title={album.name}
+                  year={album.release_date.slice(0, 4)}
+                  artist={album.artists[0].name}
+                />
+              ))}
+            </CardContainer>
+            <h2>Playlists</h2>
+            <CardContainer cardWidth={200}>
+              {playlistResults.map((playlist) => (
+                <PlaylistCards
+                  key={playlist.id}
+                  image={playlist.images[0].url}
+                  title={playlist.name}
+                  description={playlist.description}
+                />
+              ))}
+            </CardContainer>
           </div>
         )}
-        {/* {artistResults.length > 0 && (
-          <div className="search-results">
-            <h3>Artists</h3>
-            {artistResults.map((artist) => (
-              <Results key={artist.id} artist={artist} chooseTrack={chooseTrack} />
-            ))}
-          </div>
-        )} */}
       </div>
       <Footer />
     </section>
