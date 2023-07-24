@@ -12,7 +12,13 @@ import {
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
-export default function Home({ accessToken, userName, userImage,setTrackUri }) {
+export default function Home({
+  accessToken,
+  userName,
+  userImage,
+  setTrackUri,
+  setTypeId, setType
+}) {
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
@@ -181,6 +187,7 @@ export default function Home({ accessToken, userName, userImage,setTrackUri }) {
 
   function chooseTrack(track) {
     setTrackUri(track);
+    // setQueue((prevQueue) => [...prevQueue, track]);
   }
 
   useEffect(() => {
@@ -200,14 +207,24 @@ export default function Home({ accessToken, userName, userImage,setTrackUri }) {
         </h1>
         <CardContainer cardWidth={200}>
           {trackResults.map((track) => (
-            <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>
+            <TrackCards
+              key={track.id}
+              track={track}
+              chooseTrack={chooseTrack}
+              // addToQueue={addToQueue}
+            />
           ))}
         </CardContainer>
 
         <h2>Songs you might like</h2>
         <CardContainer cardWidth={200}>
           {recommendedTracks.map((track) => (
-            <TrackCards key={track.id} track={track}  chooseTrack={chooseTrack}/>
+            <TrackCards
+              key={track.id}
+              track={track}
+              chooseTrack={chooseTrack}
+              // addToQueue={addToQueue}
+            />
           ))}
         </CardContainer>
 
@@ -222,7 +239,14 @@ export default function Home({ accessToken, userName, userImage,setTrackUri }) {
         <CardContainer cardWidth={200}>
           {globalTracks.map((item) => {
             const track = item.track;
-            return <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>;
+            return (
+              <TrackCards
+                key={track.id}
+                track={track}
+                chooseTrack={chooseTrack}
+                // addToQueue={addToQueue}
+              />
+            );
           })}
         </CardContainer>
 
@@ -230,16 +254,23 @@ export default function Home({ accessToken, userName, userImage,setTrackUri }) {
         <CardContainer cardWidth={200}>
           {recentlyPlayed.map((item) => {
             const track = item.track;
-            return <TrackCards key={track.id} track={track} chooseTrack={chooseTrack} />;
+            return (
+              <TrackCards
+                key={track.id}
+                track={track}
+                chooseTrack={chooseTrack}
+                // addToQueue={addToQueue}
+              />
+            );
           })}
         </CardContainer>
 
-        <h2>Some playlists for you</h2>
+        <h2>Some albums for you</h2>
         <CardContainer cardWidth={200}>
           {genrePlaylist.map((album) => (
             <AlbumCards
               key={album.id}
-              image={album.images[0].url}
+              image={album.images[0]?.url}
               title={album.name}
               year={album.release_date.slice(0, 4)}
               artist={album.artists[0].name}
@@ -258,11 +289,15 @@ export default function Home({ accessToken, userName, userImage,setTrackUri }) {
         <CardContainer cardWidth={200}>
           {featuredPlaylists.map((playlist) => (
             <PlaylistCards
-              key={playlist.id}
-              image={playlist.images[0].url}
-              title={playlist.name}
-              description={playlist.description}
-            />
+            key={playlist.id}
+            image={playlist.images[0]?.url}
+            title={playlist.name}
+            description={playlist.description}
+            id={playlist.id}
+            type={playlist.type}
+            setType={setType}
+            setTypeId={setTypeId}
+          />
           ))}
         </CardContainer>
       </div>

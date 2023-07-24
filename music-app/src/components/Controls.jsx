@@ -6,40 +6,23 @@ export default function Controls({
   accessToken,
   trackUri,
   setTrackUri,
-  // fetchTrackUri,
-  // setFetchTrackUri,
+  queue,
 }) {
   const [play, setPlay] = useState(false);
-  const initialVolume = 0.5;
-  // const [trackUri, setTrackUri] = useState([]);
-
-  // useEffect(() => {
-  //   const getUri = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:5000/api/uri");
-  //       const data = await response.json();
-  //       setTrackUri(data.uri);
-  //       console.log(data.uri);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   if (fetchTrackUri) {
-  //     getUri();
-  //     setFetchTrackUri(false); // Reset the state to false after fetching the URI
-  //   }
-  // }, [fetchTrackUri]);
+  const initialVolume = 0.35;
 
   useEffect(() => {
     setPlay(true);
     trackUri != "" && localStorage.setItem("trackUri", trackUri);
   }, [trackUri]);
 
+  // useEffect(() => {
+  //   console.log(queue);
+  // }, [queue]);
+
   useEffect(() => {
-    // When the component mounts, get the trackUri from localStorage
     const storedTrackUri = localStorage.getItem("trackUri");
-    setTrackUri(storedTrackUri); // Set the initial value to the value from localStorage or an empty string if not available
+    setTrackUri(storedTrackUri);
   }, [setTrackUri]);
 
   if (!accessToken) return null;

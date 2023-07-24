@@ -1,40 +1,97 @@
 import { truncateString } from "./Results";
+import { BsPlayCircleFill } from "react-icons/bs";
+import { FaItunesNote, FaUserAlt } from "react-icons/fa";
+import { BiSolidPlaylist } from "react-icons/bi";
+import { IoDiscSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
-export function TrackCards({ track,chooseTrack }) {
+export function TrackCards({ track, chooseTrack, addToQueue }) {
   const artistNames = track.artists.map((artist) => artist.name).join(", ");
   const truncatedArtistNames = truncateString(artistNames, 40);
+
   function handlePlay() {
     chooseTrack(track?.uri);
   }
+
+  // function handleAddToQueue() {
+  //   addToQueue(track?.uri);
+  // }
+
   return (
-    <div className="card"
-    style={{ cursor: "pointer" }} onClick={handlePlay}>
-      <img
-        className="cover-img"
-        src={track.album.images[0].url}
-        alt={track.name}
-      />
+    <div className="card" style={{ cursor: "pointer" }}>
+      {track.album.images[0] ? (
+        <img
+          className="cover-img"
+          src={track.album.images[0]?.url}
+          alt={track.name}
+        />
+      ) : (
+        <div className="img-placeholder">
+          <FaItunesNote className="img-placeholder-icon" />
+        </div>
+      )}
+      {/* <div
+        className="add-to-queue-button"
+        onClick={handleAddToQueue}
+        style={{
+          backgroundColor: "black",
+          borderRadius: "10px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Add to Queue
+      </div> */}
+      <CardPlayButton handleClick={handlePlay} />
       <p className="card-title">{truncateString(track.name, 16)}</p>
       <p className="card-text">{truncatedArtistNames}</p>
     </div>
   );
 }
 
-export function PlaylistCards({ image, title, description }) {
+export function PlaylistCards({ image, title, description, id, type, setTypeId, setType}) {
   const truncatedDescription = truncateString(description, 35);
+
+  function handleClick() {
+    setTypeId(id);
+    setType(type);
+  }
   return (
-    <div className="card">
-      <img className="cover-img" src={image} alt={title} />
+
+
+<Link className="card"
+        to={`/${type}/${id}`}
+        onClick={handleClick}
+      >
+      {image ? (
+        <img className="cover-img" src={image} alt={title} />
+      ) : (
+        <div className="img-placeholder">
+          <BiSolidPlaylist className="img-placeholder-icon" />
+        </div>
+      )}
+      <CardPlayButton />
       <p className="card-title">{truncateString(title, 14)}</p>
       <p className="card-text">{truncatedDescription}</p>
-    </div>
+      </Link>
+     
   );
 }
 
 export function AlbumCards({ image, title, year, artist }) {
+  // function handlePlay(){
+  //   chooseTrack(track);
+  // }
   return (
     <div className="card">
-      <img className="cover-img" src={image} alt={title} />
+      {image ? (
+        <img className="cover-img" src={image} alt={title} />
+      ) : (
+        <div className="img-placeholder">
+          <IoDiscSharp className="img-placeholder-icon" />
+        </div>
+      )}
+      <CardPlayButton />
       <p className="card-title">{truncateString(title, 14)}</p>
       <p className="card-text">
         {year} • {artist}
@@ -44,15 +101,29 @@ export function AlbumCards({ image, title, year, artist }) {
 }
 
 export function ArtistCards({ artist }) {
+  // function handlePlay(){
+  //   chooseTrack(artist);
+  // }
   return (
     <div className="card">
-      <img
-        className="artist-img"
-        src={artist.images[0].url}
-        alt={artist.name}
-      />
+      {artist.images[0] ? (
+        <img
+          className="cover-img artist-img"
+          src={artist.images[0]?.url}
+          alt={artist.name}
+        />
+      ) : (
+        <div className="img-placeholder" style={{ borderRadius: "100%" }}>
+          <FaUserAlt className="img-placeholder-icon" />
+        </div>
+      )}
+      <CardPlayButton />
       <p className="card-title">{truncateString(artist.name, 16)}</p>
       <p className="card-text">Artist</p>
     </div>
   );
+}
+
+export function CardPlayButton({ handleClick }) {
+  return <BsPlayCircleFill className="play-btn" onClick={handleClick} />;
 }

@@ -11,6 +11,9 @@ import Home from "./components/Home";
 import Controls from "./components/Controls";
 import NavBar from "./components/NavBar";
 import Search from "./components/Search";
+import Playlists from "./components/Playlists";
+import Artists from "./components/Artists";
+import Albums from "./components/Albums";
 import useAuth from "./components/useAuth";
 import "./styles/App.css";
 
@@ -18,30 +21,21 @@ const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
 export default function App() {
-  // const [fetchTrackUri, setFetchTrackUri] = useState(true);
-  const [trackUri, setTrackUri] = useState([]);
   return (
     <Router>
-      <AppContent
-        trackUri={trackUri}
-        setTrackUri={setTrackUri}
-        // fetchTrackUri={fetchTrackUri}
-        // setFetchTrackUri={setFetchTrackUri}
-      />
+      <AppContent />
     </Router>
   );
 }
 
-function AppContent({
-  trackUri,
-  setTrackUri,
-  // fetchTrackUri,
-  // setFetchTrackUri,
-}) {
+function AppContent() {
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
   const [clientId, setClientId] = useState(null); // State variable for storing the client ID
-
+  const [trackUri, setTrackUri] = useState([]);
+  const [typeId, setTypeId] = useState("");
+  const [type, setType] = useState("");
+  const [queue, setQueue] = useState([]);
   const { accessToken } = useAuth(code); // State variable for storing the accessToken
   const location = useLocation();
   const showNavandControls = location.pathname !== "/login";
@@ -81,7 +75,13 @@ function AppContent({
 
   return (
     <main className="main-page">
-      {showNavandControls && <NavBar accessToken={accessToken} />}
+      {showNavandControls && (
+        <NavBar
+          accessToken={accessToken}
+          setTypeId={setTypeId}
+          setType={setType}
+        />
+      )}
       <Routes>
         <Route path="/login" element={<Login clientId={clientId} />} />
         <Route
@@ -92,6 +92,8 @@ function AppContent({
               userName={userName}
               userImage={userImage}
               setTrackUri={setTrackUri}
+              setTypeId={setTypeId}
+          setType={setType}
             />
           }
         />
@@ -102,9 +104,39 @@ function AppContent({
               accessToken={accessToken}
               userName={userName}
               userImage={userImage}
-              setTrackUri={setTrackUri}
-              // setFetchTrackUri={setFetchTrackUri}
+              setTypeId={setTypeId}
+          setType={setType}
             />
+          }
+        />
+        <Route
+          path={`/${type}/${typeId}`}
+          element={
+            type === "artist" ? (
+              <Artists
+                accessToken={accessToken}
+                userName={userName}
+                userImage={userImage}
+                typeId={typeId}
+              />
+            ) : type === "playlist" ? (
+              <Playlists
+                accessToken={accessToken}
+                userName={userName}
+                userImage={userImage}
+                typeId={typeId}
+                setTrackUri={setTrackUri}
+              />
+            ) : type === "album" ? (
+              <Albums
+                accessToken={accessToken}
+                userName={userName}
+                userImage={userImage}
+                typeId={typeId}
+              />
+            ) : (
+              <h1>ERROR</h1>
+            )
           }
         />
       </Routes>
@@ -113,8 +145,7 @@ function AppContent({
           accessToken={accessToken}
           trackUri={trackUri}
           setTrackUri={setTrackUri}
-          // fetchTrackUri={fetchTrackUri}
-          // setFetchTrackUri={setFetchTrackUri}
+          queue={queue}
         />
       )}
     </main>

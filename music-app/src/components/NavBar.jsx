@@ -10,7 +10,7 @@ import { truncateString } from "./Results";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 // NavBar component responsible for rendering the sidebar navigation.
-export default function NavBar({ accessToken }) {
+export default function NavBar({ accessToken, setTypeId, setType }) {
   const auth = `Bearer ${accessToken}`;
   const [savedPlaylists, setSavedPlaylists] = useState([]);
   const [savedAlbums, setSavedAlbums] = useState([]);
@@ -19,7 +19,7 @@ export default function NavBar({ accessToken }) {
 
   // Function to update the screen height state
   const updateScreenHeight = () => {
-    setScreenHeight(window.innerHeight - 430);
+    setScreenHeight(window.innerHeight - 380);
   };
 
   useEffect(() => {
@@ -83,47 +83,56 @@ export default function NavBar({ accessToken }) {
         </div>
         <div className="nav-section">
           <h4 className="nav-title">LIBRARY</h4>
-          <Link className="nav-button create-new" to="/">
+          {/* <Link className="nav-button create-new" to="/">
             <FiPlusSquare className="nav-icon" />
             <h4 className="nav-link">Create New</h4>
-          </Link>
+          </Link> */}
           <div className="pl-container">
             <div className="playlist-list" style={{ height: screenHeight }}>
-              <Link className="nav-button nav-button-pl" to="/favorites">
+              {/* <Link className="nav-button nav-button-pl" to="/favorites">
                 <img className="nav-pl-img" src={liked} alt="pl-img" />
                 <div>
                   <h4 className="nav-link">Favorites</h4>
                   <p className="nav-text">Playlist • You</p>
                 </div>
-              </Link>
+              </Link> */}
               {savedArtists != [] &&
                 savedArtists.map((artist) => (
                   <NavButtons
+                    id={artist.id}
                     key={artist.uri}
                     image={artist.images[0].url}
                     title={truncateString(artist.name, 15)}
                     text="Artist"
                     type={artist.type}
+                    setTypeId={setTypeId}
+                    setType={setType}
                   />
                 ))}
               {savedPlaylists != [] &&
                 savedPlaylists.map((playlist) => (
                   <NavButtons
+                    id={playlist.id}
                     key={playlist.uri}
                     image={playlist.images[0].url}
                     title={truncateString(playlist.name, 15)}
                     text={`Playlist • ${playlist.owner.display_name}`}
                     type={playlist.type}
+                    setTypeId={setTypeId}
+                    setType={setType}
                   />
                 ))}
               {savedAlbums != [] &&
                 savedAlbums.map((album) => (
                   <NavButtons
+                    id={album.album.id}
                     key={album.album.uri}
                     image={album.album.images[0].url}
                     title={truncateString(album.album.name, 14)}
                     text={`Album • ${album.album.artists[0].name}`}
                     type={album.album.type}
+                    setTypeId={setTypeId}
+                    setType={setType}
                   />
                 ))}
             </div>
@@ -134,10 +143,18 @@ export default function NavBar({ accessToken }) {
   );
 }
 
-function NavButtons({ image, title, text, type }) {
+function NavButtons({ id, image, title, text, type, setTypeId, setType }) {
+  function handleClick() {
+    setTypeId(id);
+    setType(type);
+  }
   return (
     <div>
-      <Link className="nav-button nav-button-pl" to={`/${type}`}>
+      <Link
+        className="nav-button nav-button-pl"
+        to={`/${type}/${id}`}
+        onClick={handleClick}
+      >
         <img
           className={`nav-pl-img ${type == "artist" && "nav-artist-img"}`}
           src={image}

@@ -20,6 +20,7 @@ export default function Search({
   userName,
   userImage,
   setTrackUri,
+  setTypeId, setType
   // setFetchTrackUri,
 }) {
   //Initializing state variables
@@ -60,14 +61,13 @@ export default function Search({
           headers: {
             Authorization: auth,
           },
-        });
-
-        console.log(results);
+        }); 
         if (!cancel) {
           setTrackResults(results.data.tracks.items);
           setArtistResults(results.data.artists.items);
           setAlbumResults(results.data.albums.items);
           setPlaylistResults(results.data.playlists.items);
+          console.log(playlistResults);
         }
       } catch (error) {
         console.log("Error fetching search results:", error);
@@ -79,6 +79,9 @@ export default function Search({
     return () => (cancel = true); // Cancel the fetch request if the component unmounts or the search query changes
   }, [search, accessToken]);
 
+  function handlePlay(){
+    chooseTrack(track);
+  }
   return (
     <section className="center">
       <Header
@@ -91,23 +94,23 @@ export default function Search({
       <div className="center-content">
         {!search ? (
           <div className="default-search">
-            <h2>Browse</h2>
+            <h2>Search any song you want.</h2>
           </div>
         ) : (
           <div className="search-results">
             <h2>Tracks</h2>
             <CardContainer cardWidth={200}>
               {trackResults.map((track) => (
-                <TrackCards key={track.id} track={track} />
+                <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>
               ))}
             </CardContainer>
 
-            <h2>Artists</h2>
+            {artistResults.length > 0 && <div><h2>Artists</h2>
             <CardContainer cardWidth={200}>
               {artistResults.map((artist) => (
                 <ArtistCards key={artist.id} artist={artist} />
               ))}
-            </CardContainer>
+            </CardContainer></div>}
 
             <h2>Albums</h2>
             <CardContainer cardWidth={200}>
@@ -126,9 +129,13 @@ export default function Search({
               {playlistResults.map((playlist) => (
                 <PlaylistCards
                   key={playlist.id}
-                  image={playlist.images[0].url}
+                  image={playlist.images[0]?.url}
                   title={playlist.name}
                   description={playlist.description}
+                  id={playlist.id}
+                  type={playlist.type}
+                  setType={setType}
+                  setTypeId={setTypeId}
                 />
               ))}
             </CardContainer>
