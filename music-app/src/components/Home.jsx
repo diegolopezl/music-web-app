@@ -12,7 +12,7 @@ import {
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
-export default function Home({ accessToken, userName, userImage }) {
+export default function Home({ accessToken, userName, userImage,setTrackUri }) {
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
@@ -179,6 +179,10 @@ export default function Home({ accessToken, userName, userImage }) {
 
   const [time, setTime] = useState("");
 
+  function chooseTrack(track) {
+    setTrackUri(track);
+  }
+
   useEffect(() => {
     let date = new Date();
     let hour = date.getHours();
@@ -196,14 +200,14 @@ export default function Home({ accessToken, userName, userImage }) {
         </h1>
         <CardContainer cardWidth={200}>
           {trackResults.map((track) => (
-            <TrackCards key={track.id} track={track} />
+            <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>
           ))}
         </CardContainer>
 
         <h2>Songs you might like</h2>
         <CardContainer cardWidth={200}>
           {recommendedTracks.map((track) => (
-            <TrackCards key={track.id} track={track} />
+            <TrackCards key={track.id} track={track}  chooseTrack={chooseTrack}/>
           ))}
         </CardContainer>
 
@@ -218,7 +222,7 @@ export default function Home({ accessToken, userName, userImage }) {
         <CardContainer cardWidth={200}>
           {globalTracks.map((item) => {
             const track = item.track;
-            return <TrackCards key={track.id} track={track} />;
+            return <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>;
           })}
         </CardContainer>
 
@@ -226,7 +230,7 @@ export default function Home({ accessToken, userName, userImage }) {
         <CardContainer cardWidth={200}>
           {recentlyPlayed.map((item) => {
             const track = item.track;
-            return <TrackCards key={track.id} track={track} />;
+            return <TrackCards key={track.id} track={track} chooseTrack={chooseTrack} />;
           })}
         </CardContainer>
 

@@ -91,6 +91,7 @@ function AppContent({
               accessToken={accessToken}
               userName={userName}
               userImage={userImage}
+              setTrackUri={setTrackUri}
             />
           }
         />

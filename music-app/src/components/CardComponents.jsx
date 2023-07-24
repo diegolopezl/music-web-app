@@ -1,10 +1,14 @@
 import { truncateString } from "./Results";
 
-export function TrackCards({ track }) {
+export function TrackCards({ track,chooseTrack }) {
   const artistNames = track.artists.map((artist) => artist.name).join(", ");
   const truncatedArtistNames = truncateString(artistNames, 40);
+  function handlePlay() {
+    chooseTrack(track?.uri);
+  }
   return (
-    <div className="card">
+    <div className="card"
+    style={{ cursor: "pointer" }} onClick={handlePlay}>
       <img
         className="cover-img"
         src={track.album.images[0].url}
