@@ -29,13 +29,6 @@ export default function Results({ track, chooseTrack, artist }) {
   );
 }
 
-export function truncateString(text, maxLength) {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return text.substring(0, maxLength) + "...";
-}
-
 // const postUri = async (trackUri) => {
 //   try {
 //     const response = await fetch("http://localhost:5000/api/track", {

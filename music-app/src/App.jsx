@@ -119,6 +119,7 @@ function AppContent() {
                 userName={userName}
                 userImage={userImage}
                 typeId={typeId}
+                setTrackUri={setTrackUri}
               />
             ) : type === "playlist" ? (
               <Playlists
@@ -134,6 +135,7 @@ function AppContent() {
                 userName={userName}
                 userImage={userImage}
                 typeId={typeId}
+                setTrackUri={setTrackUri}
               />
             ) : (
               <h1>ERROR</h1>
@@ -151,4 +153,35 @@ function AppContent() {
       )}
     </main>
   );
+}
+
+export function capitalizeFirstLetter(str) {
+  const [firstLetter, ...rest] = str;
+  return firstLetter.toUpperCase() + rest.join("");
+}
+
+export function truncateString(text, maxLength) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + "...";
+}
+
+export function formatNumberWithCommas(numberString) {
+  const numericValue = parseInt(numberString);
+  if (isNaN(numericValue)) {
+    return numberString;
+  }
+  return numericValue.toLocaleString("en-US");
+}
+
+export function msToMinuteFormat(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  const formattedMinutes = minutes.toString();
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${formattedMinutes}:${formattedSeconds}`;
 }

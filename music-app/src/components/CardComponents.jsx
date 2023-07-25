@@ -1,4 +1,4 @@
-import { truncateString } from "./Results";
+import { truncateString } from "../App";
 import { BsPlayCircleFill } from "react-icons/bs";
 import { FaItunesNote, FaUserAlt } from "react-icons/fa";
 import { BiSolidPlaylist } from "react-icons/bi";
@@ -42,6 +42,7 @@ export function TrackCards({ track, chooseTrack, addToQueue }) {
       >
         Add to Queue
       </div> */}
+
       <CardPlayButton handleClick={handlePlay} />
       <p className="card-title">{truncateString(track.name, 16)}</p>
       <p className="card-text">{truncatedArtistNames}</p>
@@ -150,5 +151,9 @@ export function ArtistCards({ artist, setTypeId, setType }) {
 }
 
 export function CardPlayButton({ handleClick }) {
-  return <BsPlayCircleFill className="play-btn" onClick={handleClick} />;
+  return (
+    <div className="play-btn-bg">
+      <BsPlayCircleFill className="play-btn" onClick={handleClick} />
+    </div>
+  );
 }

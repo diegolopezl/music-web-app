@@ -196,43 +196,44 @@
   overflow-y: auto;
   grid-area: center;
   grid-template-areas: "header" "content" "footer";
+  background-color: #202020;
 }
+
 .center-content {
   grid-area: content;
   padding: 20px 40px;
   padding-bottom: 100px;
   height: 100%;
-  background: linear-gradient(180deg, #202020 0%, #181818 25%);
+  background: linear-gradient(180deg, #202020 0%, #181818 20%);
 }
 
-.pl-route-content {
-  grid-area: content;
-  padding: 0;
-  padding-bottom: 100px;
-  height: 100%;
-  background: linear-gradient(180deg, #ff00737a 0%, #000 25%);
-}
-
-.artist-route-content {
-  grid-area: content;
-  padding: 0;
-  padding-bottom: 100px;
-  height: 2000px;
-  background: linear-gradient(180deg, #0084ff7a 0%, #000 25%);
-}
-
+.pl-route-content,
+.artist-route-content,
 .album-route-content {
   grid-area: content;
   padding: 0;
   padding-bottom: 100px;
-  height: 2000px;
-  background: linear-gradient(180deg, #00ffa678 0%, #000 25%);
+  height: 100%;
 }
+
+.pl-route-content {
+  background: linear-gradient(180deg, #3858e67a 0%, #181818 20%);
+}
+
+.artist-route-content {
+  background: linear-gradient(180deg, #ffcb2ec4 0%, #181818 20%);
+}
+
+.album-route-content {
+  background: linear-gradient(180deg, rgb(113, 57, 255) 0%, #181818 20%);
+}
+
 .default-search {
   display: grid;
   place-content: center;
   padding: 100px;
 }
+
 .header {
   grid-area: header;
   height: 80px;
@@ -241,12 +242,13 @@
   grid-template-columns: repeat(2, 1fr);
   justify-content: space-between;
   padding: 0 40px;
-  background-color: rgba(25, 25, 25, 0.5);
   position: fixed;
   z-index: 1;
   left: 250px;
   right: 0;
+  background-color: rgba(20, 20, 20, 0.5);
   backdrop-filter: blur(40px);
+  transition: background-color 0.3s ease-in-out;
 }
 
 .search-bar {
@@ -359,23 +361,36 @@
 
 .play-btn {
   visibility: hidden;
-  position: absolute;
-  /* background-color: black; */
-  border-radius: 100%;
-  right: 25px;
-  top: 130px;
-  width: 50px;
-  height: 50px;
+  border-radius: 50px;
+  width: 52px;
+  height: 52px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
 }
 
 .play-btn path {
   color: #ff2d6c;
 }
 
+.play-btn-bg {
+  display: grid;
+  place-content: center;
+  visibility: hidden;
+  position: absolute;
+  background-color: black;
+  right: 25px;
+  top: 130px;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  border-radius: 100%;
+  transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+}
+
+.card:hover .play-btn-bg,
 .card:hover .play-btn {
   visibility: visible;
   opacity: 1;
@@ -492,15 +507,14 @@
 
 .type-info {
   font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: 600;
 }
 
 .playlist-tracks {
   display: grid;
   width: 100%;
   padding: 40px;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 .artist-tracks,
@@ -513,41 +527,57 @@
 }
 
 .playlist-li {
-  display: flex;
+  display: grid;
+  grid-template: 70px / 70% 30%;
   align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
   gap: 10px;
-  padding: 10px;
+  padding: 0 10px;
 }
 
 .playlist-li:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.075);
   cursor: pointer;
+}
+
+.playlist-li > div {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 20px auto 1fr;
+  gap: 10px;
 }
 
 .playlist-li-index {
   width: 20px;
-  margin-right: 10px;
   display: flex;
-  justify-content: end;
+  justify-content: right;
 }
+
 .playlist-li-img {
   height: 50px;
   width: 50px;
 }
 
 .playlist-li-img > img {
-  width: 100%;
   height: 100%;
   border-radius: 3px;
 }
 
 .playlist-li-text > h4 {
-  font-size: 1rem;
   padding-bottom: 5px;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .playlist-li-text > p {
   font-size: 0.88rem;
   opacity: 0.8;
+}
+
+.playlist-li-duration {
+  font-size: 0.88rem;
+  margin-right: 50px;
+  opacity: 0.75;
+  justify-self: right;
 }

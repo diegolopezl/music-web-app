@@ -6,7 +6,7 @@ import { AiFillHeart } from "react-icons/ai";
 import liked from "../assets/likedsongs.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { truncateString } from "./Results";
+import { truncateString } from "../App";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 // NavBar component responsible for rendering the sidebar navigation.

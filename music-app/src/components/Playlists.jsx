@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
+import { BiSolidPlaylist } from "react-icons/bi";
+import {
+  capitalizeFirstLetter,
+  formatNumberWithCommas,
+  msToMinuteFormat,
+} from "../App";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
@@ -14,10 +20,8 @@ export default function Playlist({
 }) {
   const [playlistData, setPlaylistData] = useState({});
   const [playlistTracks, setPlaylistTracks] = useState([]);
-  const [count, setCount] = useState(0);
   const auth = `Bearer ${accessToken}`;
 
-  console.log(typeId);
   useEffect(() => {
     const startTime = performance.now();
     const fetchData = async () => {
@@ -31,7 +35,6 @@ export default function Playlist({
           }
         );
         setPlaylistData(response.data);
-        console.log(playlistData.tracks);
         setPlaylistTracks(response.data?.tracks?.items || []);
         console.log(playlistData);
       } catch (e) {
@@ -45,11 +48,6 @@ export default function Playlist({
 
     console.log(`Tiempo de ejecucion: ${elapsedTime} milisegundos`);
   }, [accessToken, typeId]);
-
-  function capitalizeFirstLetter(str) {
-    const [firstLetter, ...rest] = str;
-    return firstLetter.toUpperCase() + rest.join("");
-  }
 
   function chooseTrack(track) {
     setTrackUri(track);
@@ -74,31 +72,33 @@ export default function Playlist({
             </div>
             <div className="playlist-title-section">
               <h2 className="route-type">
+                {playlistData.public == true && "Public"}{" "}
                 {capitalizeFirstLetter(playlistData.type)}
               </h2>
               <h1 className="type-title">{playlistData.name}</h1>
               <p className="type-description">{playlistData.description}</p>
               <h4 className="type-info">
                 {playlistData.owner?.display_name} •{" "}
-                {playlistData.followers.total} likes •{" "}
-                {playlistData.tracks.items.length} songs
+                {formatNumberWithCommas(playlistData.followers.total)} likes •{" "}
+                {playlistData.total_tracks} songs
               </h4>
             </div>
           </div>
         ) : (
-          <p></p>
+          <PlaceHolderPlaylist />
         )}
         <div className="playlist-tracks">
           {playlistTracks.map((playlist, index) => {
             return (
-              <PlaylistTracks
+              <TrackListItems
                 key={playlist.track.uri}
                 name={playlist.track.name}
                 image={playlist.track.album.images[0]?.url}
-                artist={playlist.track.artists[0].name}
+                artists={playlist.track.artists}
                 index={index + 1}
                 chooseTrack={chooseTrack}
                 track={playlist.track}
+                duration={msToMinuteFormat(playlist.track.duration_ms)}
               />
             );
           })}
@@ -109,20 +109,52 @@ export default function Playlist({
   );
 }
 
-function PlaylistTracks({ track, name, artist, image, index, chooseTrack }) {
+function TrackListItems({
+  track,
+  name,
+  artists,
+  image,
+  duration,
+  index,
+  chooseTrack,
+}) {
   function handlePlay() {
     chooseTrack(track?.uri);
   }
+  const artistNames = artists.map((artist) => artist.name).join(", ");
   return (
     <div className="playlist-li" onClick={handlePlay}>
-      <div className="playlist-li-index">{index}</div>
-      <div className="playlist-li-img">
-        <img src={image} />
+      <div>
+        <div className="playlist-li-index">
+          <p>{index}</p>
+        </div>
+        <div className="playlist-li-img">
+          <img src={image} />
+        </div>
+        <div className="playlist-li-text">
+          <h4>{name}</h4>
+          <p>{artistNames}</p>
+        </div>
       </div>
-      <div className="playlist-li-text">
-        <h4>{name}</h4>
-        <p>{artist}</p>
-      </div>
+      <p className="playlist-li-duration">{duration}</p>
     </div>
+  );
+}
+
+function PlaceHolderPlaylist() {
+  return (
+    <>
+      <div className="playlist-page-top">
+        <div className="playlist-cover-wrap">
+          <BiSolidPlaylist className="img-placeholder-icon" />
+        </div>
+        <div className="playlist-title-section">
+          <h2 className="route-type">Playlist</h2>
+          <h1 className="type-title">Title</h1>
+          <h4 className="type-info">Owner • 0 likes • 0 songs</h4>
+        </div>
+      </div>
+      <div className="playlist-tracks"></div>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { FiSearch } from "react-icons/fi";
 
@@ -8,12 +8,6 @@ export default function Header({ search, setSearch, userName, userImage }) {
   };
 
   const location = useLocation();
-
-  // const handleLogout = () => {
-  //   logout();
-  //   window.location = "/login"; // Redirect to login
-  // };
-
   return (
     <header className="header">
       <div>
@@ -22,7 +16,7 @@ export default function Header({ search, setSearch, userName, userImage }) {
         )}
       </div>
       <div className="user-menu">
-        <img className="user-img" src={userImage} />
+        <img className="user-img" src={userImage} alt="User" />
         <p>{userName}</p>
       </div>
     </header>

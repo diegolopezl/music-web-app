@@ -148,11 +148,11 @@ export default function Search({
             <CardContainer cardWidth={200}>
               {playlistResults.map((playlist) => (
                 <PlaylistCards
-                  key={playlist.id}
+                  id={playlist.id}
+                  key={playlist.uri}
                   image={playlist.images[0]?.url}
                   title={playlist.name}
                   description={playlist.description}
-                  id={playlist.id}
                   type={playlist.type}
                   setType={setType}
                   setTypeId={setTypeId}
