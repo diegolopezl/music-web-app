@@ -19,6 +19,7 @@ export default function Playlist({
 
   console.log(typeId);
   useEffect(() => {
+    const startTime = performance.now();
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -38,6 +39,11 @@ export default function Playlist({
       }
     };
     fetchData();
+    const endTime = performance.now();
+
+    const elapsedTime = endTime - startTime;
+
+    console.log(`Tiempo de ejecucion: ${elapsedTime} milisegundos`);
   }, [accessToken, typeId]);
 
   function capitalizeFirstLetter(str) {

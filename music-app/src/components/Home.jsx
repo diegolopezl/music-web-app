@@ -33,6 +33,7 @@ export default function Home({
   const auth = `Bearer ${accessToken}`;
 
   useEffect(() => {
+    const startTime = performance.now();
     const fetchData = async () => {
       try {
         const [topTracks, topGlobal, recent, featured, topArtists] =
@@ -182,6 +183,11 @@ export default function Home({
     };
 
     fetchData();
+    const endTime = performance.now();
+
+    const elapsedTime = endTime - startTime;
+
+    console.log(`Tiempo de ejecucion: ${elapsedTime} milisegundos`);
   }, [accessToken]);
 
   const [time, setTime] = useState("");

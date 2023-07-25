@@ -36,6 +36,7 @@ export default function Search({
   //Fetches data from the Spotify API based on the search query.
   //Updates the trackResults and artistResults state array variables accordingly.
   useEffect(() => {
+    const startTime = performance.now();
     if (!search) {
       setTrackResults([]); // Reset trackResults when search is empty
       setSearchResults([]); // Reset artistResults when search is empty
@@ -70,6 +71,11 @@ export default function Search({
     };
 
     fetchData();
+    const endTime = performance.now();
+
+    const elapsedTime = endTime - startTime;
+
+    console.log(`Tiempo de ejecucion: ${elapsedTime} milisegundos`);
 
     return () => (cancel = true); // Cancel the fetch request if the component unmounts or the search query changes
   }, [search, accessToken]);
