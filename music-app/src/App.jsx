@@ -93,7 +93,7 @@ function AppContent() {
               userImage={userImage}
               setTrackUri={setTrackUri}
               setTypeId={setTypeId}
-          setType={setType}
+              setType={setType}
             />
           }
         />
@@ -104,8 +104,9 @@ function AppContent() {
               accessToken={accessToken}
               userName={userName}
               userImage={userImage}
+              setTrackUri={setTrackUri}
               setTypeId={setTypeId}
-          setType={setType}
+              setType={setType}
             />
           }
         />

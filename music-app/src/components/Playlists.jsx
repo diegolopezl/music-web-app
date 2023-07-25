@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
-import {
-  TrackCards,
-  PlaylistCards,
-  AlbumCards,
-  ArtistCards,
-} from "./CardComponents";
-import CardContainer from "./CardContainer";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
-export default function Playlist({ accessToken, userName, userImage, typeId, setTrackUri }) {
+export default function Playlist({
+  accessToken,
+  userName,
+  userImage,
+  typeId,
+  setTrackUri,
+}) {
   const [playlistData, setPlaylistData] = useState({});
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [count, setCount] = useState(0);
@@ -74,27 +73,29 @@ export default function Playlist({ accessToken, userName, userImage, typeId, set
               <h1 className="type-title">{playlistData.name}</h1>
               <p className="type-description">{playlistData.description}</p>
               <h4 className="type-info">
-                {playlistData.owner?.display_name} • {playlistData.followers.total} likes • {playlistData.tracks.items.length} songs
+                {playlistData.owner?.display_name} •{" "}
+                {playlistData.followers.total} likes •{" "}
+                {playlistData.tracks.items.length} songs
               </h4>
             </div>
           </div>
         ) : (
-          <p>...</p>
+          <p></p>
         )}
         <div className="playlist-tracks">
-           {playlistTracks.map((playlist, index) => {
-            return(
-            <PlaylistTracks
-              key={playlist.track.uri}
-              name={playlist.track.name}
-              image={playlist.track.album.images[0]?.url}
-              artist={playlist.track.artists[0].name}
-              index={index+1}
-              chooseTrack={chooseTrack}
-              track={playlist.track}
-            />);
-        
-            })}
+          {playlistTracks.map((playlist, index) => {
+            return (
+              <PlaylistTracks
+                key={playlist.track.uri}
+                name={playlist.track.name}
+                image={playlist.track.album.images[0]?.url}
+                artist={playlist.track.artists[0].name}
+                index={index + 1}
+                chooseTrack={chooseTrack}
+                track={playlist.track}
+              />
+            );
+          })}
         </div>
       </div>
       <Footer />
@@ -102,15 +103,15 @@ export default function Playlist({ accessToken, userName, userImage, typeId, set
   );
 }
 
-function PlaylistTracks({track, name, artist, image, index, chooseTrack}){
-  function handlePlay(){
+function PlaylistTracks({ track, name, artist, image, index, chooseTrack }) {
+  function handlePlay() {
     chooseTrack(track?.uri);
   }
-  return(
+  return (
     <div className="playlist-li" onClick={handlePlay}>
       <div className="playlist-li-index">{index}</div>
       <div className="playlist-li-img">
-        <img src={image}/>
+        <img src={image} />
       </div>
       <div className="playlist-li-text">
         <h4>{name}</h4>

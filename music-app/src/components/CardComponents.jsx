@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export function TrackCards({ track, chooseTrack, addToQueue }) {
   const artistNames = track.artists.map((artist) => artist.name).join(", ");
-  const truncatedArtistNames = truncateString(artistNames, 40);
+  const truncatedArtistNames = truncateString(artistNames, 30);
 
   function handlePlay() {
     chooseTrack(track?.uri);
@@ -49,7 +49,15 @@ export function TrackCards({ track, chooseTrack, addToQueue }) {
   );
 }
 
-export function PlaylistCards({ image, title, description, id, type, setTypeId, setType}) {
+export function PlaylistCards({
+  image,
+  title,
+  description,
+  id,
+  type,
+  setTypeId,
+  setType,
+}) {
   const truncatedDescription = truncateString(description, 35);
 
   function handleClick() {
@@ -57,12 +65,7 @@ export function PlaylistCards({ image, title, description, id, type, setTypeId, 
     setType(type);
   }
   return (
-
-
-<Link className="card"
-        to={`/${type}/${id}`}
-        onClick={handleClick}
-      >
+    <Link className="card" to={`/${type}/${id}`} onClick={handleClick}>
       {image ? (
         <img className="cover-img" src={image} alt={title} />
       ) : (
@@ -73,17 +76,30 @@ export function PlaylistCards({ image, title, description, id, type, setTypeId, 
       <CardPlayButton />
       <p className="card-title">{truncateString(title, 14)}</p>
       <p className="card-text">{truncatedDescription}</p>
-      </Link>
-     
+    </Link>
   );
 }
 
-export function AlbumCards({ image, title, year, artist }) {
+export function AlbumCards({
+  id,
+  type,
+  image,
+  title,
+  year,
+  artist,
+  setTypeId,
+  setType,
+}) {
   // function handlePlay(){
-  //   chooseTrack(track);
+  //   chooseTrack(artist);
   // }
+
+  function handleClick() {
+    setTypeId(id);
+    setType(type);
+  }
   return (
-    <div className="card">
+    <Link className="card" to={`/${type}/${id}`} onClick={handleClick}>
       {image ? (
         <img className="cover-img" src={image} alt={title} />
       ) : (
@@ -96,16 +112,25 @@ export function AlbumCards({ image, title, year, artist }) {
       <p className="card-text">
         {year} • {artist}
       </p>
-    </div>
+    </Link>
   );
 }
 
-export function ArtistCards({ artist }) {
+export function ArtistCards({ artist, setTypeId, setType }) {
   // function handlePlay(){
   //   chooseTrack(artist);
   // }
+
+  function handleClick() {
+    setTypeId(artist.id);
+    setType(artist.type);
+  }
   return (
-    <div className="card">
+    <Link
+      className="card"
+      to={`/${artist.type}/${artist.id}`}
+      onClick={handleClick}
+    >
       {artist.images[0] ? (
         <img
           className="cover-img artist-img"
@@ -120,7 +145,7 @@ export function ArtistCards({ artist }) {
       <CardPlayButton />
       <p className="card-title">{truncateString(artist.name, 16)}</p>
       <p className="card-text">Artist</p>
-    </div>
+    </Link>
   );
 }
 

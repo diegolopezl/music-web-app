@@ -20,7 +20,8 @@ export default function Search({
   userName,
   userImage,
   setTrackUri,
-  setTypeId, setType
+  setTypeId,
+  setType,
   // setFetchTrackUri,
 }) {
   //Initializing state variables
@@ -32,11 +33,6 @@ export default function Search({
   const [searchResults, setSearchResults] = useState([]);
   const auth = `Bearer ${accessToken}`;
 
-  function chooseTrack(track) {
-    setTrackUri(track);
-    setSearch("");
-    // setFetchTrackUri(true);
-  }
   //Fetches data from the Spotify API based on the search query.
   //Updates the trackResults and artistResults state array variables accordingly.
   useEffect(() => {
@@ -61,13 +57,12 @@ export default function Search({
           headers: {
             Authorization: auth,
           },
-        }); 
+        });
         if (!cancel) {
           setTrackResults(results.data.tracks.items);
           setArtistResults(results.data.artists.items);
           setAlbumResults(results.data.albums.items);
           setPlaylistResults(results.data.playlists.items);
-          console.log(playlistResults);
         }
       } catch (error) {
         console.log("Error fetching search results:", error);
@@ -79,8 +74,10 @@ export default function Search({
     return () => (cancel = true); // Cancel the fetch request if the component unmounts or the search query changes
   }, [search, accessToken]);
 
-  function handlePlay(){
-    chooseTrack(track);
+  function chooseTrack(track) {
+    setTrackUri(track);
+    setSearch("");
+    // setFetchTrackUri(true);
   }
   return (
     <section className="center">
@@ -101,16 +98,29 @@ export default function Search({
             <h2>Tracks</h2>
             <CardContainer cardWidth={200}>
               {trackResults.map((track) => (
-                <TrackCards key={track.id} track={track} chooseTrack={chooseTrack}/>
+                <TrackCards
+                  key={track.id}
+                  track={track}
+                  chooseTrack={chooseTrack}
+                />
               ))}
             </CardContainer>
 
-            {artistResults.length > 0 && <div><h2>Artists</h2>
-            <CardContainer cardWidth={200}>
-              {artistResults.map((artist) => (
-                <ArtistCards key={artist.id} artist={artist} />
-              ))}
-            </CardContainer></div>}
+            {artistResults.length > 0 && (
+              <div>
+                <h2>Artists</h2>
+                <CardContainer cardWidth={200}>
+                  {artistResults.map((artist) => (
+                    <ArtistCards
+                      key={artist.id}
+                      artist={artist}
+                      setType={setType}
+                      setTypeId={setTypeId}
+                    />
+                  ))}
+                </CardContainer>
+              </div>
+            )}
 
             <h2>Albums</h2>
             <CardContainer cardWidth={200}>
@@ -121,6 +131,10 @@ export default function Search({
                   title={album.name}
                   year={album.release_date.slice(0, 4)}
                   artist={album.artists[0].name}
+                  id={album.id}
+                  type={album.type}
+                  setType={setType}
+                  setTypeId={setTypeId}
                 />
               ))}
             </CardContainer>

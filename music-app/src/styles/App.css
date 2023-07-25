@@ -197,7 +197,6 @@
   grid-area: center;
   grid-template-areas: "header" "content" "footer";
 }
-
 .center-content {
   grid-area: content;
   padding: 20px 40px;
@@ -214,8 +213,23 @@
   background: linear-gradient(180deg, #ff00737a 0%, #000 25%);
 }
 
-.default-search{
-  display:grid;
+.artist-route-content {
+  grid-area: content;
+  padding: 0;
+  padding-bottom: 100px;
+  height: 2000px;
+  background: linear-gradient(180deg, #0084ff7a 0%, #000 25%);
+}
+
+.album-route-content {
+  grid-area: content;
+  padding: 0;
+  padding-bottom: 100px;
+  height: 2000px;
+  background: linear-gradient(180deg, #00ffa678 0%, #000 25%);
+}
+.default-search {
+  display: grid;
   place-content: center;
   padding: 100px;
 }
@@ -394,7 +408,8 @@
   margin-bottom: 15px;
 }
 
-.img-placeholder {
+.img-placeholder,
+.playlist-cover-wrap {
   display: grid;
   place-content: center;
 }
@@ -444,6 +459,7 @@
 .playlist-cover-wrap {
   height: 200px;
   width: 200px;
+  background-color: #272727;
   box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5);
 }
 .playlist-cover {
@@ -474,56 +490,64 @@
   padding-bottom: 15px;
 }
 
-.type-info{
+.type-info {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
-.playlist-tracks{
+.playlist-tracks {
   display: grid;
   width: 100%;
   padding: 40px;
-  background-color: rgba(0,0,0,0.25);
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
-.playlist-li{
+.artist-tracks,
+.album-tracks {
+  display: grid;
+  width: 100%;
+  height: 1500px;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.playlist-li {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px;
 }
 
-.playlist-li:hover{
-  background-color: rgba(255,255,255,0.2);
+.playlist-li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   cursor: pointer;
 }
 
-.playlist-li-index{
+.playlist-li-index {
   width: 20px;
   margin-right: 10px;
   display: flex;
   justify-content: end;
 }
-.playlist-li-img{
+.playlist-li-img {
   height: 50px;
   width: 50px;
-  
 }
 
-.playlist-li-img > img{
+.playlist-li-img > img {
   width: 100%;
   height: 100%;
   border-radius: 3px;
 }
 
-.playlist-li-text > h4{
+.playlist-li-text > h4 {
   font-size: 1rem;
   padding-bottom: 5px;
 }
 
-.playlist-li-text > p{
+.playlist-li-text > p {
   font-size: 0.88rem;
   opacity: 0.8;
 }

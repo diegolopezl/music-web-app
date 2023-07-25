@@ -17,7 +17,8 @@ export default function Home({
   userName,
   userImage,
   setTrackUri,
-  setTypeId, setType
+  setTypeId,
+  setType,
 }) {
   const [trackResults, setTrackResults] = useState([]);
   const [artistResults, setArtistResults] = useState([]);
@@ -231,7 +232,12 @@ export default function Home({
         <h2>Your top artists</h2>
         <CardContainer cardWidth={200}>
           {artistResults.map((item) => (
-            <ArtistCards key={item.id} artist={item} />
+            <ArtistCards
+              key={item.id}
+              artist={item}
+              setType={setType}
+              setTypeId={setTypeId}
+            />
           ))}
         </CardContainer>
 
@@ -274,6 +280,10 @@ export default function Home({
               title={album.name}
               year={album.release_date.slice(0, 4)}
               artist={album.artists[0].name}
+              id={album.id}
+              type={album.type}
+              setType={setType}
+              setTypeId={setTypeId}
             />
           ))}
         </CardContainer>
@@ -289,15 +299,15 @@ export default function Home({
         <CardContainer cardWidth={200}>
           {featuredPlaylists.map((playlist) => (
             <PlaylistCards
-            key={playlist.id}
-            image={playlist.images[0]?.url}
-            title={playlist.name}
-            description={playlist.description}
-            id={playlist.id}
-            type={playlist.type}
-            setType={setType}
-            setTypeId={setTypeId}
-          />
+              key={playlist.id}
+              image={playlist.images[0]?.url}
+              title={playlist.name}
+              description={playlist.description}
+              id={playlist.id}
+              type={playlist.type}
+              setType={setType}
+              setTypeId={setTypeId}
+            />
           ))}
         </CardContainer>
       </div>
