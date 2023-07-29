@@ -26,7 +26,7 @@ export function TrackCards({ track, chooseTrack, addToQueue }) {
           alt={track.name}
         />
       ) : (
-        <div className="img-placeholder">
+        <div className="cover-img">
           <FaItunesNote className="img-placeholder-icon" />
         </div>
       )}
@@ -70,7 +70,7 @@ export function PlaylistCards({
       {image ? (
         <img className="cover-img" src={image} alt={title} />
       ) : (
-        <div className="img-placeholder">
+        <div className="cover-img">
           <BiSolidPlaylist className="img-placeholder-icon" />
         </div>
       )}
@@ -104,7 +104,7 @@ export function AlbumCards({
       {image ? (
         <img className="cover-img" src={image} alt={title} />
       ) : (
-        <div className="img-placeholder">
+        <div className="cover-img">
           <IoDiscSharp className="img-placeholder-icon" />
         </div>
       )}
@@ -139,7 +139,7 @@ export function ArtistCards({ artist, setTypeId, setType }) {
           alt={artist.name}
         />
       ) : (
-        <div className="img-placeholder" style={{ borderRadius: "100%" }}>
+        <div className="cover-img" style={{ borderRadius: "100%" }}>
           <FaUserAlt className="img-placeholder-icon" />
         </div>
       )}

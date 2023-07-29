@@ -297,7 +297,12 @@ export default function Home({
         <h2>Recommended Artists</h2>
         <CardContainer cardWidth={200}>
           {recommendedArtists.map((artist) => (
-            <ArtistCards key={artist.id} artist={artist} />
+            <ArtistCards
+              key={artist.id}
+              artist={artist}
+              setType={setType}
+              setTypeId={setTypeId}
+            />
           ))}
         </CardContainer>
 

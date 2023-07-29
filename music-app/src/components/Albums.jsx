@@ -49,19 +49,21 @@ export default function Albums({
       <div className="album-route-content">
         {albumData.images?.length > 0 ? (
           <div className="playlist-page-top">
-            <div className="playlist-cover-wrap">
-              <img className="playlist-cover" src={albumData.images[0].url} />
-            </div>
-            <div className="playlist-title-section">
-              <h2 className="route-type">
-                {capitalizeFirstLetter(albumData.type)}
-              </h2>
-              <h1 className="type-title">{albumData.name}</h1>
-              <h4 className="type-info">
-                {albumData.artists[0]?.name && `Various Artists`} •{" "}
-                {albumData.release_date.slice(0, 4)} • {albumData.total_tracks}{" "}
-                songs
-              </h4>
+            <div>
+              <div className="playlist-cover-wrap">
+                <img className="playlist-cover" src={albumData.images[0].url} />
+              </div>
+              <div className="playlist-title-section">
+                <h2 className="route-type">
+                  {capitalizeFirstLetter(albumData.type)}
+                </h2>
+                <h1 className="type-title">{albumData.name}</h1>
+                <h4 className="type-info">
+                  {albumData.artists[0]?.name && `Various Artists`} •{" "}
+                  {albumData.release_date.slice(0, 4)} •{" "}
+                  {albumData.total_tracks} songs
+                </h4>
+              </div>
             </div>
           </div>
         ) : (
@@ -95,54 +97,35 @@ function AlbumTracks({ uri, name, artists, index, duration, chooseTrack }) {
   const artistNames = artists.map((artist) => artist.name).join(", ");
   return (
     <div className="playlist-li" onClick={handlePlay}>
-      <div>
-        <div className="playlist-li-index">
-          <p>{index}</p>
-        </div>
-        <div></div>
-        <div className="playlist-li-text">
-          <h4>{name}</h4>
-          <p>{artistNames}</p>
-        </div>
+      <div className="playlist-li-index">
+        <p>{index}</p>
+      </div>
+      <div></div>
+      <div className="playlist-li-text">
+        <h4>{name}</h4>
+        <p>{artistNames}</p>
       </div>
       <p className="playlist-li-duration">{duration}</p>
     </div>
   );
 }
 
-// function PlaylistTracks({ track, name, artist, image, index, chooseTrack }) {
-//   function handlePlay() {
-//     chooseTrack(track?.uri);
-//   }
-//   return (
-//     <div className="playlist-li" onClick={handlePlay}>
-//       <div className="playlist-li-index">{index}</div>
-//       <div className="playlist-li-img">
-//         <img src={image} />
-//       </div>
-//       <div className="playlist-li-text">
-//         <h4>{name}</h4>
-//         <p>{artist}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
 function PlaceHolderAlbum() {
   return (
     <>
       <div className="playlist-page-top">
-        <div className="playlist-cover-wrap">
-          <IoDiscSharp className="img-placeholder-icon" />
-          {/* <img className="playlist-cover" src={playlistData.images[0].url} /> */}
-        </div>
-        <div className="playlist-title-section">
-          <h2 className="route-type">Album</h2>
-          <h1 className="type-title">Title</h1>
-          <h4 className="type-info">Artist • Year • 0 songs</h4>
+        <div>
+          <div className="playlist-cover-wrap">
+            <IoDiscSharp className="img-placeholder-icon" />
+          </div>
+          <div className="playlist-title-section">
+            <h2 className="route-type">Album</h2>
+            <h1 className="type-title">Title</h1>
+            <h4 className="type-info">Artist • Year • 0 songs</h4>
+          </div>
         </div>
       </div>
-      <div className="album-tracks"></div>
+      <div className="playlists-tracks"></div>
     </>
   );
 }
